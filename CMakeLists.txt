@@ -14,6 +14,9 @@ qt_add_executable(Smart_Point_Of_Sale
     src/spos_mainwindow.h
     src/database/database_manager.cpp
     src/database/database_manager.h
+    src/models/Product.h
+    src/repositories/productRepository.cpp
+    src/repositories/productRepository.h
     src/spos_mainwindow.ui
 )
 
