@@ -10,14 +10,28 @@ qt_standard_project_setup()
 qt_add_executable(Smart_Point_Of_Sale
     WIN32 MACOSX_BUNDLE
     src/main.cpp
+
     src/spos_mainwindow.cpp
     src/spos_mainwindow.h
+    src/spos_mainwindow.ui
+
+    src/dialog/dialog_addproduct.h
+    src/dialog/dialog_addproduct.cpp
+    src/dialog/dialog_addproduct.ui
+    src/dialog/dialog_modifyproduct.h
+    src/dialog/dialog_modifyproduct.cpp
+    src/dialog/dialog_modifyproduct.ui
+    src/dialog/dialog_deleteproduct.h
+    src/dialog/dialog_deleteproduct.cpp
+    src/dialog/dialog_deleteproduct.ui
+
+    src/models/Product.h
+
     src/database/database_manager.cpp
     src/database/database_manager.h
-    src/models/Product.h
+
     src/repositories/productRepository.cpp
     src/repositories/productRepository.h
-    src/spos_mainwindow.ui
 )
 
 target_link_libraries(Smart_Point_Of_Sale
