@@ -73,6 +73,21 @@ public:
      */
     Product getProduct(int id);
 
+    /**
+     * @brief Retrieves products matching the given filters.
+     *
+     * Searches the products table using optional filters. The method allows
+     * searching by barcode, product name, or both.
+     *
+     * @param barcode Product barcode filter.
+     * @param name Product name filter.
+     *
+     * @return A list of matching Product objects. Returns an empty list if no
+     *         products are found or the query fails.
+     */
+    QList<Product> findProducts(const QString& barcode,
+                                const QString& name);
+
 private:
     /**
      * @brief Default constructor.
