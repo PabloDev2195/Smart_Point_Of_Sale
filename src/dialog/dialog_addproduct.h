@@ -15,6 +15,11 @@ public:
     explicit Dialog_AddProduct(QWidget *parent = nullptr);
     ~Dialog_AddProduct();
 
+private slots:
+    void on_pushButton_Save_clicked();
+
+    void on_pushButton_Cancel_clicked();
+
 private:
     Ui::Dialog_AddProduct *ui;
 };

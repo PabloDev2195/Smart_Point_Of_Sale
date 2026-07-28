@@ -32,6 +32,9 @@ qt_add_executable(Smart_Point_Of_Sale
 
     src/repositories/productRepository.cpp
     src/repositories/productRepository.h
+
+    src/product/product_mgr.h
+    src/product/product_mgr.cpp
 )
 
 target_link_libraries(Smart_Point_Of_Sale

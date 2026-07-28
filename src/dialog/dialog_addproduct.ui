@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>378</width>
-    <height>223</height>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="pushButton_Save">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>180</y>
+     <x>60</x>
+     <y>270</y>
      <width>93</width>
      <height>29</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="pushButton_Cancel">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>180</y>
+     <x>200</x>
+     <y>270</y>
      <width>93</width>
      <height>29</height>
     </rect>
@@ -39,37 +39,24 @@
     <string>Cancelar</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_Name">
+  <widget class="QLabel" name="label_Supplier">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>20</y>
-     <width>63</width>
+     <width>81</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Nombre</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_Barcode">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Codigo de Barras</string>
+    <string>Proveedor</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_PurchasePrice">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>100</y>
+     <x>10</x>
+     <y>140</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -81,8 +68,8 @@
   <widget class="QLabel" name="label_SellPrice">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>140</y>
+     <x>10</x>
+     <y>180</y>
      <width>121</width>
      <height>20</height>
     </rect>
@@ -91,31 +78,11 @@
     <string>Precio de Venta</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit_Name">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>10</y>
-     <width>221</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="textEdit_Barcode">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>50</y>
-     <width>221</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QDoubleSpinBox" name="doubleSpinBox_PurchasePrice">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>90</y>
+     <x>140</x>
+     <y>140</y>
      <width>221</width>
      <height>31</height>
     </rect>
@@ -124,11 +91,90 @@
   <widget class="QDoubleSpinBox" name="doubleSpinBox_SellPrice">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>130</y>
+     <x>140</x>
+     <y>180</y>
      <width>221</width>
      <height>31</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Name">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>63</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nombre</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Unit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>63</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Unidad</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_Supplier">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>20</y>
+     <width>221</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_Name">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>60</y>
+     <width>221</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_Unit">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>100</y>
+     <width>221</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_Barcode">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>220</y>
+     <width>221</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Barcode">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>121</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Codigo de Barras</string>
    </property>
   </widget>
  </widget>
