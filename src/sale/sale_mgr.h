@@ -63,6 +63,13 @@ public:
      */
     double getTotal() const;
 
+    /**
+     * @brief Clears all products from the current sale.
+     *
+     * Removes all sale items and resets the current transaction.
+     */
+    void clear();
+
 private:
     /**
      * @brief List of products currently included in the sale.
