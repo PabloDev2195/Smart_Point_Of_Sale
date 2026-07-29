@@ -127,3 +127,107 @@ QList<Product> ProductManager::findProducts(const QString& barcode,
 
     return products;
 }
+
+/**
+ * @brief Actualiza la información de un producto existente en la base de datos.
+ *
+ * Busca el producto mediante su identificador único (`id`) y actualiza
+ * los campos nombre, código de barras, precio de compra y precio de venta.
+ *
+ * La consulta utiliza parámetros enlazados mediante `addBindValue()`,
+ * asignando cada valor a los signos `?` en el mismo orden en que aparecen
+ * dentro de la consulta SQL.
+ *
+ * @param product Objeto Product que contiene el ID del producto y los
+ * nuevos datos que se guardarán en la base de datos.
+ *
+ * @return true si la consulta SQL se ejecutó correctamente.
+ * @return false si ocurrió un error durante la actualización.
+ */
+bool ProductManager::updateProduct(const Product& product)
+{
+    QSqlQuery query;
+
+    query.prepare(
+        "UPDATE products "
+        "SET name = ?, "
+        "barcode = ?, "
+        "purchase_price = ?, "
+        "sale_price = ? "
+        "WHERE id = ?"
+        );
+
+    query.addBindValue(product.name);
+    query.addBindValue(product.barcode);
+    query.addBindValue(product.purchase_price);
+    query.addBindValue(product.sale_price);
+    query.addBindValue(product.id);
+
+    if (!query.exec())
+    {
+        qDebug() << "Update product failed:"
+                 << query.lastError().text();
+
+        return false;
+    }
+
+    if (query.numRowsAffected() == 0)
+    {
+        qDebug() << "Product not found. ID:"
+                 << product.id;
+
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief Obtiene un producto de la base de datos mediante su ID.
+ *
+ * Ejecuta una consulta SQL para buscar un producto cuyo identificador
+ * coincida con el valor recibido. Si el producto existe, sus datos se
+ * almacenan en un objeto Product y posteriormente se devuelve.
+ *
+ * Si no se encuentra un producto con el ID proporcionado, se devuelve
+ * un objeto Product con sus valores predeterminados.
+ *
+ * @param id Identificador único del producto que se desea obtener.
+ *
+ * @return Objeto Product con la información encontrada.
+ * @return Un objeto Product vacío si no existe el producto o si ocurre
+ * un error durante la consulta.
+ */
+Product ProductManager::getProduct(int id)
+{
+    Product product;
+
+    QSqlQuery query;
+
+    query.prepare(
+        "SELECT id, name, barcode, purchase_price, sale_price "
+        "FROM products "
+        "WHERE id = ?"
+        );
+
+    query.addBindValue(id);
+
+    if (query.exec())
+    {
+        if (query.next())
+        {
+            product.id = query.value("id").toInt();
+            product.name = query.value("name").toString();
+            product.barcode = query.value("barcode").toString();
+            product.purchase_price = query.value("purchase_price").toDouble();
+            product.sale_price = query.value("sale_price").toDouble();
+        }
+    }
+    else
+    {
+        qDebug() << "Error getting product:"
+                 << query.lastError().text();
+    }
+
+    return product;
+}
