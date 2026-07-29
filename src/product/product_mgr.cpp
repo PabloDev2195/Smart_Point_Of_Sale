@@ -231,3 +231,37 @@ Product ProductManager::getProduct(int id)
 
     return product;
 }
+
+/**
+ * @brief Deletes a product from the database.
+ *
+ * Removes the product record from the products table using the product ID.
+ * The function executes a DELETE SQL query and verifies if a record was
+ * successfully removed.
+ *
+ * @param productId Unique identifier of the product to delete.
+ *
+ * @return true if the product was deleted successfully,
+ *         false if the operation failed or no product was found.
+ */
+bool ProductManager::deleteProduct(int productId)
+{
+    QSqlQuery query;
+
+    query.prepare(
+        "DELETE FROM products "
+        "WHERE id = ?"
+        );
+
+    query.addBindValue(productId);
+
+    if (!query.exec())
+    {
+        qDebug() << "Delete product failed:"
+                 << query.lastError().text();
+
+        return false;
+    }
+
+    return query.numRowsAffected() > 0;
+}
