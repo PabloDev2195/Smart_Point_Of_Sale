@@ -4,59 +4,271 @@
 #include "../src/dialog/dialog_modifyproduct.h"
 #include "../src/dialog/dialog_deleteproduct.h"
 #include "../src/dialog/dialog_findproduct.h"
+#include "../src/product/product_mgr.h"
+#include <QMessageBox>
 
+/**
+ * @brief Constructor of the main application window.
+ *
+ * Initializes the main window UI components and configures the products
+ * table used for the current sale. The table columns are configured with
+ * product information such as barcode, name, quantity and prices.
+ *
+ * @param parent Parent widget.
+ */
 SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::SPOS_MainWindow)
-    , m_model(new QStandardItemModel(this))
 {
     ui->setupUi(this);
 
-    m_model->setHorizontalHeaderLabels({
+    ui->tableWidget_Products->setColumnCount(6);
+
+    ui->tableWidget_Products->setHorizontalHeaderLabels({
         "ID",
         "Codigo de Barras",
         "Producto",
-        "Precio de compra",
-        "Precio de venta"
+        "Cantidad",
+        "Precio Unitario",
+        "Subtotal"
     });
 
-    ui->tableView_Products->setModel(m_model);
+    ui->tableWidget_Products->setColumnWidth(2, 400);
 
-    ui->tableView_Products->horizontalHeader()->setStretchLastSection(true);
-
-    ui->tableView_Products->horizontalHeader()->setSectionResizeMode(
+    ui->tableWidget_Products->horizontalHeader()->setSectionResizeMode(
         2, QHeaderView::Stretch);
+
+    ui->lineEdit_Barcode->setFocus();
 }
 
+/**
+ * @brief Destructor of the main application window.
+ *
+ * Releases the resources allocated for the UI.
+ */
 SPOS_MainWindow::~SPOS_MainWindow()
 {
     delete ui;
 }
 
+/**
+ * @brief Opens the dialog to add a new product.
+ *
+ * Displays the Add Product dialog where the user can register a new product
+ * in the database. After closing the dialog, the barcode input field is
+ * focused again to continue scanning products.
+ */
 void SPOS_MainWindow::on_action_AddNewProduct_triggered()
 {
     Dialog_AddProduct dialog(this);
 
     dialog.exec();
+
+    ui->lineEdit_Barcode->setFocus();
 }
 
+/**
+ * @brief Opens the dialog to modify an existing product.
+ *
+ * Displays the Modify Product dialog that allows the user to search and
+ * update product information stored in the database.
+ */
 void SPOS_MainWindow::on_action_ModifyProduct_triggered()
 {
     Dialog_ModifyProduct dialog(this);
 
     dialog.exec();
+
+    ui->lineEdit_Barcode->setFocus();
 }
 
+/**
+ * @brief Opens the dialog to delete a product.
+ *
+ * Displays the Delete Product dialog where the user can search and remove
+ * an existing product from the database.
+ */
 void SPOS_MainWindow::on_action_DeleteProduct_triggered()
 {
     Dialog_DeleteProduct dialog(this);
 
     dialog.exec();
+
+    ui->lineEdit_Barcode->setFocus();
 }
 
+/**
+ * @brief Opens the product search dialog.
+ *
+ * Displays the Find Product dialog that allows the user to search products
+ * using different criteria.
+ */
 void SPOS_MainWindow::on_pushButton_FindProduct_clicked()
 {
     Dialog_FindProduct dialog(this);
 
     dialog.exec();
+
+    ui->lineEdit_Barcode->setFocus();
+}
+
+/**
+ * @brief Handles barcode scanner input.
+ *
+ * Retrieves the barcode entered in the barcode input field, searches the
+ * corresponding product in the database and adds it to the current sale.
+ *
+ * If the product already exists in the sale table, its quantity is increased
+ * instead of creating a duplicated row.
+ */
+void SPOS_MainWindow::on_lineEdit_Barcode_returnPressed()
+{
+    QString barcode = ui->lineEdit_Barcode->text().trimmed();
+
+    if(barcode.isEmpty())
+        return;
+
+    QList<Product> products =
+        ProductManager::instance().findProducts(barcode, "");
+
+    if(!products.isEmpty())
+    {
+        m_sale.addProduct(products.first());
+        updateSaleTable();
+    }
+
+    updateSaleTotal();
+
+    ui->lineEdit_Barcode->clear();
+    ui->lineEdit_Barcode->setFocus();
+}
+
+/**
+ * @brief Updates the products table with the current sale items.
+ *
+ * Clears the current sale table and reloads it using the products stored
+ * in the active Sale object. Each row displays the product information,
+ * including barcode, name, quantity, unit price and subtotal.
+ *
+ * This function only updates the user interface representation of the sale.
+ * The sale data is managed by the Sale class.
+ */
+void SPOS_MainWindow::updateSaleTable()
+{
+    ui->tableWidget_Products->setRowCount(0);
+
+    for(const SaleItem& item : m_sale.getItems())
+    {
+        int row = ui->tableWidget_Products->rowCount();
+
+        ui->tableWidget_Products->insertRow(row);
+
+        ui->tableWidget_Products->setItem(
+            row,
+            0,
+            new QTableWidgetItem(
+                QString::number(item.product.id)
+                )
+            );
+
+        ui->tableWidget_Products->setItem(
+            row,
+            1,
+            new QTableWidgetItem(
+                item.product.barcode
+                )
+            );
+
+        ui->tableWidget_Products->setItem(
+            row,
+            2,
+            new QTableWidgetItem(
+                item.product.name
+                )
+            );
+
+        ui->tableWidget_Products->setItem(
+            row,
+            3,
+            new QTableWidgetItem(
+                QString::number(item.quantity)
+                )
+            );
+
+        ui->tableWidget_Products->setItem(
+            row,
+            4,
+            new QTableWidgetItem(
+                QString::number(item.product.sale_price, 'f', 2)
+                )
+            );
+
+        ui->tableWidget_Products->setItem(
+            row,
+            5,
+            new QTableWidgetItem(
+                QString::number(
+                    item.quantity * item.product.sale_price,
+                    'f',
+                    2
+                    )
+                )
+            );
+    }
+}
+
+/**
+ * @brief Calculates and updates the total amount of the current sale.
+ *
+ * Iterates through all products in the sale table, adds their subtotals and
+ * displays the final amount in the total field.
+ */
+void SPOS_MainWindow::updateSaleTotal()
+{
+    double totalSale = m_sale.getTotal();
+
+    ui->lineEdit_Total->setText(
+        QString("$ %1").arg(totalSale, 0, 'f', 2)
+        );
+}
+
+/**
+ * @brief Calculates and displays the customer's change.
+ *
+ * Retrieves the amount of money received from the customer, converts it
+ * from text to a numeric value and calculates the difference between the
+ * received amount and the total sale amount.
+ *
+ * The calculated change is displayed in the exchange field. After the
+ * calculation, the barcode input field is focused again to continue the
+ * sales process.
+ *
+ * If the received amount field is empty, the function returns without
+ * performing any calculation.
+ */
+void SPOS_MainWindow::on_lineEdit_Received_returnPressed()
+{
+    QString receivedText = ui->lineEdit_Received->text().trimmed();
+
+    if(receivedText.isEmpty())
+        return;
+
+    double receivedMoney = receivedText.toDouble();
+
+    if(receivedMoney >= m_sale.getTotal())
+    {
+        double exchange = receivedMoney - m_sale.getTotal();
+        ui->lineEdit_Exchange->setText(
+            QString("$ %1").arg(exchange, 0, 'f', 2));
+    }
+    else
+    {
+        QMessageBox::warning(
+            this,
+            "Falta Dinero",
+            "Falta dinero para cubrir la cuenta a pagar."
+            );
+    }
+
+    ui->lineEdit_Barcode->setFocus();
 }
