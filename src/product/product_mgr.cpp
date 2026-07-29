@@ -62,3 +62,68 @@ bool ProductManager::addProduct(const Product& product)
 
     return query.exec();
 }
+
+/**
+ * @brief Searches for products by barcode, name, or both.
+ *
+ * Executes a parameterized SQL query against the `products` table
+ * using optional search criteria. If a barcode or name is provided,
+ * the corresponding filter is added to the query using the SQL
+ * `LIKE` operator, allowing partial matches.
+ *
+ * Matching records are converted into Product objects and returned
+ * as a list.
+ *
+ * @param barcode Barcode used as a search criterion. If empty,
+ *                no barcode filter is applied.
+ * @param name Product name used as a search criterion. If empty,
+ *             no name filter is applied.
+ *
+ * @return A QList containing all products that match the specified
+ * search criteria. Returns an empty list if no products are found
+ * or if the query execution fails.
+ */
+QList<Product> ProductManager::findProducts(const QString& barcode,
+                                            const QString& name)
+{
+    QList<Product> products;
+
+    QSqlQuery query;
+
+    QString sql =
+        "SELECT id, name, barcode, purchase_price, sale_price "
+        "FROM products "
+        "WHERE 1 = 1 ";
+
+    if (!barcode.isEmpty())
+        sql += "AND barcode LIKE ? ";
+
+    if (!name.isEmpty())
+        sql += "AND name LIKE ? ";
+
+    query.prepare(sql);
+
+    if (!barcode.isEmpty())
+        query.addBindValue("%" + barcode + "%");
+
+    if (!name.isEmpty())
+        query.addBindValue("%" + name + "%");
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            Product product;
+
+            product.id = query.value(0).toInt();
+            product.name = query.value(1).toString();
+            product.barcode = query.value(2).toString();
+            product.purchase_price = query.value(3).toDouble();
+            product.sale_price = query.value(4).toDouble();
+
+            products.append(product);
+        }
+    }
+
+    return products;
+}

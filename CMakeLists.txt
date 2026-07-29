@@ -24,6 +24,9 @@ qt_add_executable(Smart_Point_Of_Sale
     src/dialog/dialog_deleteproduct.h
     src/dialog/dialog_deleteproduct.cpp
     src/dialog/dialog_deleteproduct.ui
+    src/dialog/dialog_findproduct.h
+    src/dialog/dialog_findproduct.cpp
+    src/dialog/dialog_findproduct.ui
 
     src/models/Product.h
 
