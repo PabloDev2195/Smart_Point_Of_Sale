@@ -80,6 +80,11 @@ class SPOS_MainWindow : public QMainWindow
          */
         void updateSaleTotal();
 
+        /**
+         * @brief Resets the sale-related user interface.
+         */
+        void resetSaleUI();
+
     private slots:
         /**
          * @brief Opens the Add Product dialog.
@@ -116,5 +121,15 @@ class SPOS_MainWindow : public QMainWindow
          * current sale total.
          */
         void on_lineEdit_Received_returnPressed();
+
+        /**
+         * @brief Starts a new sale transaction.
+         */
+        void on_pushButton_NewSale_clicked();
+
+        /**
+         * @brief Cancels the current sale.
+         */
+        void on_pushButton_CancelSale_clicked();
 };
 #endif // SPOS_MAINWINDOW_H

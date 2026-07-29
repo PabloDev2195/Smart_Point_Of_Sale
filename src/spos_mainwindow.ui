@@ -14,7 +14,7 @@
    <string>Miscelanea Ana Kary</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_NewSell">
+   <widget class="QPushButton" name="pushButton_NewSale">
     <property name="geometry">
      <rect>
       <x>840</x>
@@ -27,7 +27,7 @@
      <string>Nueva Compra</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_CancelSell">
+   <widget class="QPushButton" name="pushButton_CancelSale">
     <property name="geometry">
      <rect>
       <x>840</x>
