@@ -331,3 +331,37 @@ void SPOS_MainWindow::resetSaleUI()
 
     ui->lineEdit_Barcode->setFocus();
 }
+
+/**
+ * @brief Removes the selected product from the current sale.
+ *
+ * Retrieves the selected product from the sale table and removes it from
+ * the active sale using its unique product identifier. After removing the
+ * product, the sale table and total amount are refreshed.
+ *
+ * If no product is selected, a warning message is displayed and no action
+ * is performed.
+ */
+void SPOS_MainWindow::on_pushButton_RemoveProduct_clicked()
+{
+    int row = ui->tableWidget_Products->currentRow();
+
+    if (row < 0)
+    {
+        QMessageBox::warning(
+            this,
+            "Remove Product",
+            "Please select a product."
+            );
+
+        return;
+    }
+
+    int productId =
+        ui->tableWidget_Products->item(row, 0)->text().toInt();
+
+    m_sale.removeProduct(productId);
+    updateSaleTable();
+    updateSaleTotal();
+    ui->lineEdit_Barcode->setFocus();
+}
