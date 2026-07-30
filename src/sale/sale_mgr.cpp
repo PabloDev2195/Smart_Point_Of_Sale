@@ -61,3 +61,13 @@ double Sale::getTotal() const
 
     return total;
 }
+
+/**
+ * @brief Clears all products from the current sale.
+ *
+ * Removes all items stored in the current transaction.
+ */
+void Sale::clear()
+{
+    m_items.clear();
+}

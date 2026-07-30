@@ -272,3 +272,62 @@ void SPOS_MainWindow::on_lineEdit_Received_returnPressed()
 
     ui->lineEdit_Barcode->setFocus();
 }
+
+/**
+ * @brief Starts a new sale transaction.
+ *
+ * Clears the current sale data, refreshes the sale table, updates the
+ * displayed total amount and resets the sale-related user interface to
+ * prepare for a new transaction.
+ */
+void SPOS_MainWindow::on_pushButton_NewSale_clicked()
+{
+    m_sale.clear();
+    updateSaleTable();
+    updateSaleTotal();
+    resetSaleUI();
+}
+
+/**
+ * @brief Cancels the current sale.
+ *
+ * Clears all products from the active sale, refreshes the sale table,
+ * updates the total amount and resets the sale-related user interface
+ * fields to their initial state.
+ */
+void SPOS_MainWindow::on_pushButton_CancelSale_clicked()
+{
+    QMessageBox::StandardButton reply =
+        QMessageBox::question(
+            this,
+            "Cancelar venta",
+            "¿Desea cancelar la venta?",
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::No
+            );
+
+    if (reply == QMessageBox::Yes)
+    {
+        m_sale.clear();
+        updateSaleTable();
+        updateSaleTotal();
+        resetSaleUI();
+    }
+}
+
+/**
+ * @brief Resets the sale user interface.
+ *
+ * Clears all sale-related input fields, including the total amount,
+ * received money, exchange and barcode fields. Finally, sets the input
+ * focus to the barcode field to prepare for the next operation.
+ */
+void SPOS_MainWindow::resetSaleUI()
+{
+    ui->lineEdit_Total->clear();
+    ui->lineEdit_Received->clear();
+    ui->lineEdit_Exchange->clear();
+    ui->lineEdit_Barcode->clear();
+
+    ui->lineEdit_Barcode->setFocus();
+}
