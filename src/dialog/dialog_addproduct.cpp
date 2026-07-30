@@ -2,6 +2,7 @@
 #include "ui_dialog_addproduct.h"
 #include "../models/Product.h"
 #include "../product/product_mgr.h"
+#include <QMessageBox>
 
 Dialog_AddProduct::Dialog_AddProduct(QWidget *parent)
     : QDialog(parent)
@@ -29,8 +30,51 @@ void Dialog_AddProduct::on_pushButton_Save_clicked()
     product.purchase_price = ui->doubleSpinBox_PurchasePrice->value();
     product.sale_price = ui->doubleSpinBox_SellPrice->value();
 
-    ProductManager::instance().addProduct(product);
-    accept();
+    if (product.name.isEmpty())
+    {
+        QMessageBox::warning(this,
+                             "Información Incompleta",
+                             "Por favor ingresa el nombre del producto.");
+        ui->lineEdit_Name->setFocus();
+        return;
+    }
+
+    if (product.purchase_price <= 0)
+    {
+        QMessageBox::warning(this,
+                             "Información Incompleta",
+                             "Por favor ingresa el precio de compra.");
+        ui->doubleSpinBox_PurchasePrice->setFocus();
+        return;
+    }
+
+    if (product.sale_price <= 0)
+    {
+        QMessageBox::warning(this,
+                             "Información Incompleta",
+                             "Por favor ingresa el precio de venta.");
+        ui->doubleSpinBox_SellPrice->setFocus();
+        return;
+    }
+
+    if (ProductManager::instance().addProduct(product))
+    {
+        QMessageBox::information(
+            this,
+            "Producto Agregado",
+            "El producto se guardó correctamente."
+            );
+
+        accept();
+    }
+    else
+    {
+        QMessageBox::critical(
+            this,
+            "Error",
+            "El producto no pudo ser agregado."
+            );
+    }
 }
 
 
