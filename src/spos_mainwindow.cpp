@@ -107,6 +107,20 @@ void SPOS_MainWindow::on_pushButton_FindProduct_clicked()
 {
     Dialog_FindProduct dialog(this);
 
+    connect(
+        &dialog,
+        &Dialog_FindProduct::productSelected,
+        this,
+        [this](const Product& product)
+        {
+            m_sale.addProduct(product);
+
+            updateSaleTable();
+
+            updateSaleTotal();
+        }
+        );
+
     dialog.exec();
 
     ui->lineEdit_Barcode->setFocus();
