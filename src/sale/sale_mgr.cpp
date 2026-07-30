@@ -71,3 +71,23 @@ void Sale::clear()
 {
     m_items.clear();
 }
+
+/**
+ * @brief Removes a product from the current sale.
+ *
+ * Searches the current sale for the specified product ID and removes the
+ * corresponding sale item if it exists.
+ *
+ * @param productId Unique identifier of the product to remove.
+ */
+void Sale::removeProduct(int productId)
+{
+    for (int i = 0; i < m_items.size(); ++i)
+    {
+        if (m_items[i].product.id == productId)
+        {
+            m_items.removeAt(i);
+            return;
+        }
+    }
+}

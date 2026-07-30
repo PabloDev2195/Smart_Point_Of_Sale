@@ -131,5 +131,10 @@ class SPOS_MainWindow : public QMainWindow
          * @brief Cancels the current sale.
          */
         void on_pushButton_CancelSale_clicked();
+
+        /**
+         * @brief Removes the selected product from the current sale.
+         */
+        void on_pushButton_RemoveProduct_clicked();
 };
 #endif // SPOS_MAINWINDOW_H
