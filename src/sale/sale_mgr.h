@@ -70,6 +70,15 @@ public:
      */
     void clear();
 
+    /**
+     * @brief Removes a product from the current sale.
+     *
+     * Removes the sale item associated with the specified product ID.
+     *
+     * @param productId Unique identifier of the product to remove.
+     */
+    void removeProduct(int productId);
+
 private:
     /**
      * @brief List of products currently included in the sale.
