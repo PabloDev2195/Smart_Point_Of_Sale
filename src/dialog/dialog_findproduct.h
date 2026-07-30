@@ -20,12 +20,25 @@ public:
 private slots:
     void on_pushButton_FindProduct_clicked();
 
+    void on_pushButton_AddProduct_clicked();
+
 private:
     Ui::Dialog_FindProduct *ui;
 
     QStandardItemModel *m_model;
 
+    QList<Product> m_products;
+
     void loadProducts(const QList<Product>& products);
+
+signals:
+
+    /**
+     * @brief Emitted when a product is selected to be added to the sale.
+     *
+     * @param product Selected product.
+     */
+    void productSelected(const Product& product);
 };
 
 #endif // DIALOG_FINDPRODUCT_H

@@ -2,6 +2,8 @@
 #include "ui_dialog_findproduct.h"
 #include "../product/product_mgr.h"
 #include <QHeaderView>
+#include <QMessageBox>
+
 
 Dialog_FindProduct::Dialog_FindProduct(QWidget *parent)
     : QDialog(parent)
@@ -36,13 +38,13 @@ void Dialog_FindProduct::on_pushButton_FindProduct_clicked()
     QString barcode = ui->lineEdit_Barcode->text();
     QString name = ui->lineEdit_Name->text();
 
-    QList<Product> products =
+    m_products =
         ProductManager::instance().findProducts(barcode, name);
 
     ui->lineEdit_Barcode->clear();
     ui->lineEdit_Name->clear();
 
-    loadProducts(products);
+    loadProducts(m_products);
 }
 
 void Dialog_FindProduct::loadProducts(const QList<Product>& products)
@@ -60,5 +62,45 @@ void Dialog_FindProduct::loadProducts(const QList<Product>& products)
         row << new QStandardItem(QString::number(product.sale_price));
 
         m_model->appendRow(row);
+    }
+}
+
+void Dialog_FindProduct::on_pushButton_AddProduct_clicked()
+{
+    QModelIndex index =
+        ui->tableView_FindProduct->currentIndex();
+
+
+    if(!index.isValid())
+    {
+        QMessageBox::warning(
+            this,
+            "Select Product",
+            "Please select a product."
+            );
+
+        return;
+    }
+
+
+    int row = index.row();
+
+
+    int productId =
+        m_model->item(row, 0)
+            ->text()
+            .toInt();
+
+
+    for(const Product& product : m_products)
+    {
+        if(product.id == productId)
+        {
+            emit productSelected(product);
+
+            close();
+
+            return;
+        }
     }
 }
