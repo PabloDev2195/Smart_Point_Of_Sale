@@ -4,6 +4,13 @@
 #include "../product/product_mgr.h"
 #include <QMessageBox>
 
+/**
+ * @brief Constructs the Add Product dialog.
+ *
+ * Initializes the user interface for creating a new product.
+ *
+ * @param parent Parent widget.
+ */
 Dialog_AddProduct::Dialog_AddProduct(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Dialog_AddProduct)
@@ -11,18 +18,33 @@ Dialog_AddProduct::Dialog_AddProduct(QWidget *parent)
     ui->setupUi(this);
 }
 
+/**
+ * @brief Destroys the Add Product dialog.
+ *
+ * Releases the user interface resources.
+ */
 Dialog_AddProduct::~Dialog_AddProduct()
 {
     delete ui;
 }
 
+/**
+ * @brief Saves a new product.
+ *
+ * Builds the product name using the supplier, product name, and unit fields,
+ * validates the required information, and attempts to store the product in
+ * the database through ProductManager.
+ *
+ * If the operation succeeds, the dialog is closed with an accepted result.
+ * Otherwise, an error message is displayed.
+ */
 void Dialog_AddProduct::on_pushButton_Save_clicked()
 {
     QString provider = ui->lineEdit_Supplier->text().trimmed();
     QString name = ui->lineEdit_Name->text().trimmed();
     QString unit = ui->lineEdit_Unit->text().trimmed();
 
-    QString fullName = provider + " " + name + " " + unit;
+    QString fullName = provider + " / " + name + " / " + unit;
 
     Product product;
     product.name = fullName;
@@ -77,7 +99,11 @@ void Dialog_AddProduct::on_pushButton_Save_clicked()
     }
 }
 
-
+/**
+ * @brief Cancels the product creation.
+ *
+ * Closes the dialog without saving any information.
+ */
 void Dialog_AddProduct::on_pushButton_Cancel_clicked()
 {
     reject();

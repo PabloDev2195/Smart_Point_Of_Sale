@@ -3,6 +3,14 @@
 #include "../product/product_mgr.h"
 #include <QMessageBox>
 
+/**
+ * @brief Constructs the Modify Product dialog.
+ *
+ * Initializes the user interface, configures the products table,
+ * and connects the table row selection to the product loading slot.
+ *
+ * @param parent Parent widget.
+ */
 Dialog_ModifyProduct::Dialog_ModifyProduct(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Dialog_ModifyProduct)
@@ -37,6 +45,12 @@ Dialog_ModifyProduct::Dialog_ModifyProduct(QWidget *parent)
             &Dialog_ModifyProduct::loadSelectedProduct);
 }
 
+/**
+ * @brief Searches for products using the specified barcode and/or name.
+ *
+ * Retrieves matching products from the ProductManager and populates
+ * the table with the search results.
+ */
 void Dialog_ModifyProduct::on_pushButton_Find_clicked()
 {
     ProductManager& manager = ProductManager::instance();
@@ -104,6 +118,16 @@ void Dialog_ModifyProduct::on_pushButton_Find_clicked()
     }
 }
 
+/**
+ * @brief Loads the selected product into the editing controls.
+ *
+ * Retrieves the product associated with the selected table row and
+ * displays its information in the input fields, allowing the user
+ * to modify its data.
+ *
+ * @param row Selected table row.
+ * @param column Selected column (unused).
+ */
 void Dialog_ModifyProduct::loadSelectedProduct(int row, int)
 {
     int id =
@@ -139,6 +163,14 @@ void Dialog_ModifyProduct::loadSelectedProduct(int row, int)
         );
 }
 
+/**
+ * @brief Saves the modified product information.
+ *
+ * Reads the values entered by the user, updates the current Product
+ * object, and sends the changes to the ProductManager. If the update
+ * succeeds, the dialog is closed with an accepted result; otherwise,
+ * an error message is displayed.
+ */
 void Dialog_ModifyProduct::on_pushButton_Save_clicked()
 {
     m_product.name = ui->lineEdit_Name->text();
@@ -168,11 +200,21 @@ void Dialog_ModifyProduct::on_pushButton_Save_clicked()
     }
 }
 
+/**
+ * @brief Cancels the product modification.
+ *
+ * Closes the dialog without saving any changes.
+ */
 void Dialog_ModifyProduct::on_pushButton_Cancel_clicked()
 {
     reject();
 }
 
+/**
+ * @brief Destroys the Modify Product dialog.
+ *
+ * Releases the user interface resources.
+ */
 Dialog_ModifyProduct::~Dialog_ModifyProduct()
 {
     delete ui;

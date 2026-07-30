@@ -3,6 +3,14 @@
 #include "../product/product_mgr.h"
 #include <QMessageBox>
 
+/**
+ * @brief Constructs the Delete Product dialog.
+ *
+ * Initializes the user interface, configures the products table,
+ * and prepares the dialog for searching and deleting products.
+ *
+ * @param parent Parent widget.
+ */
 Dialog_DeleteProduct::Dialog_DeleteProduct(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Dialog_DeleteProduct)
@@ -32,11 +40,22 @@ Dialog_DeleteProduct::Dialog_DeleteProduct(QWidget *parent)
         );
 }
 
+/**
+ * @brief Destroys the Delete Product dialog.
+ *
+ * Releases the user interface resources.
+ */
 Dialog_DeleteProduct::~Dialog_DeleteProduct()
 {
     delete ui;
 }
 
+/**
+ * @brief Searches for products using the specified barcode and/or name.
+ *
+ * Retrieves the matching products from ProductManager and displays
+ * the results in the products table.
+ */
 void Dialog_DeleteProduct::on_pushButton_Find_clicked()
 {
     QString barcode = ui->lineEdit_Barcode->text();
@@ -91,6 +110,15 @@ void Dialog_DeleteProduct::on_pushButton_Find_clicked()
     }
 }
 
+/**
+ * @brief Stores the selected product identifier.
+ *
+ * Saves the identifier of the product selected in the table so it
+ * can be deleted later.
+ *
+ * @param row Selected table row.
+ * @param column Selected table column (unused).
+ */
 void Dialog_DeleteProduct::on_tableWidget_Products_cellClicked(
     int row,
     int column)
@@ -104,6 +132,15 @@ void Dialog_DeleteProduct::on_tableWidget_Products_cellClicked(
             .toInt();
 }
 
+/**
+ * @brief Deletes the selected product.
+ *
+ * Verifies that a product has been selected, requests user
+ * confirmation, and removes the product from the database using
+ * ProductManager.
+ *
+ * Displays a confirmation or error message depending on the result.
+ */
 void Dialog_DeleteProduct::on_pushButton_Delete_clicked()
 {
     if (m_selectedProductId == -1)
@@ -152,6 +189,11 @@ void Dialog_DeleteProduct::on_pushButton_Delete_clicked()
     }
 }
 
+/**
+ * @brief Cancels the delete operation.
+ *
+ * Closes the dialog without deleting any product.
+ */
 void Dialog_DeleteProduct::on_pushButton_Cancel_clicked()
 {
     reject();
