@@ -22,6 +22,11 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    connect(ui->tableWidget_Products,
+            &QTableWidget::cellChanged,
+            this,
+            &SPOS_MainWindow::onSaleItemChanged);
+
     ui->tableWidget_Products->setColumnCount(6);
 
     ui->tableWidget_Products->setHorizontalHeaderLabels({
@@ -169,6 +174,8 @@ void SPOS_MainWindow::on_lineEdit_Barcode_returnPressed()
  */
 void SPOS_MainWindow::updateSaleTable()
 {
+    ui->tableWidget_Products->blockSignals(true);
+
     ui->tableWidget_Products->setRowCount(0);
 
     for(const SaleItem& item : m_sale.getItems())
@@ -228,7 +235,31 @@ void SPOS_MainWindow::updateSaleTable()
                     )
                 )
             );
+
+        ui->tableWidget_Products->item(row, 0)->setFlags(
+            Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        ui->tableWidget_Products->item(row, 1)->setFlags(
+            Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        ui->tableWidget_Products->item(row, 2)->setFlags(
+            Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        ui->tableWidget_Products->item(row, 5)->setFlags(
+            Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        ui->tableWidget_Products->item(row, 3)->setFlags(
+            Qt::ItemIsSelectable |
+            Qt::ItemIsEnabled |
+            Qt::ItemIsEditable);
+
+        ui->tableWidget_Products->item(row, 4)->setFlags(
+            Qt::ItemIsSelectable |
+            Qt::ItemIsEnabled |
+            Qt::ItemIsEditable);
     }
+
+    ui->tableWidget_Products->blockSignals(false);
 }
 
 /**
@@ -378,4 +409,70 @@ void SPOS_MainWindow::on_pushButton_RemoveProduct_clicked()
     updateSaleTable();
     updateSaleTotal();
     ui->lineEdit_Barcode->setFocus();
+}
+
+/**
+ * @brief Handles changes made to sale items in the products table.
+ *
+ * This function is triggered when a cell value in the current sale table
+ * is modified. It processes changes only from the quantity and unit price
+ * columns.
+ *
+ * When the quantity is modified, the corresponding sale item quantity is
+ * updated in the Sale object. When the unit price is modified, the product
+ * sale price is updated.
+ *
+ * After a successful update, the row subtotal is recalculated and the total
+ * amount of the current sale is refreshed.
+ *
+ * @param row Row index of the modified item in the products table.
+ * @param column Column index of the modified cell.
+ */
+void SPOS_MainWindow::onSaleItemChanged(int row, int column)
+{
+    if (column != 3 && column != 4)
+        return;
+
+    int productId =
+        ui->tableWidget_Products
+            ->item(row, 0)
+            ->text()
+            .toInt();
+
+    double quantity =
+        ui->tableWidget_Products
+            ->item(row, 3)
+            ->text()
+            .toDouble();
+
+    double price =
+        ui->tableWidget_Products
+            ->item(row, 4)
+            ->text()
+            .toDouble();
+
+    if (column == 3)
+    {
+        if (!m_sale.updateQuantity(productId, quantity))
+            return;
+    }
+    else
+    {
+        if (!m_sale.updateUnitPrice(productId, price))
+            return;
+    }
+
+    double subtotal = quantity * price;
+
+    ui->tableWidget_Products->blockSignals(true);
+
+    ui->tableWidget_Products
+        ->item(row, 5)
+        ->setText(
+            QString::number(subtotal, 'f', 2)
+            );
+
+    ui->tableWidget_Products->blockSignals(false);
+
+    updateSaleTotal();
 }

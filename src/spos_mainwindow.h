@@ -136,5 +136,17 @@ class SPOS_MainWindow : public QMainWindow
          * @brief Removes the selected product from the current sale.
          */
         void on_pushButton_RemoveProduct_clicked();
+
+        /**
+         * @brief Handles changes made to sale items in the products table.
+         *
+         * Updates the current sale when the quantity or unit price of a product
+         * is modified from the sale table. After updating the sale data, the row
+         * subtotal and the total sale amount are recalculated.
+         *
+         * @param row Row index of the modified item.
+         * @param column Column index of the modified cell.
+         */
+        void onSaleItemChanged(int row, int column);
 };
 #endif // SPOS_MAINWINDOW_H
