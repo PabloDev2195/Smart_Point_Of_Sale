@@ -79,6 +79,24 @@ public:
      */
     void removeProduct(int productId);
 
+    /**
+     * @brief Updates the quantity of a product in the current sale.
+     *
+     * @param productId Product identifier.
+     * @param quantity New quantity.
+     * @return true if the product was found and updated.
+     */
+    bool updateQuantity(int productId, double quantity);
+
+    /**
+     * @brief Updates the unit sale price of a product.
+     *
+     * @param productId Product identifier.
+     * @param price New unit price.
+     * @return true if the product was found and updated.
+     */
+    bool updateUnitPrice(int productId, double price);
+
 private:
     /**
      * @brief List of products currently included in the sale.

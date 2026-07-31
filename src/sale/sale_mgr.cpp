@@ -91,3 +91,67 @@ void Sale::removeProduct(int productId)
         }
     }
 }
+
+/**
+ * @brief Updates the quantity of a product in the current sale.
+ *
+ * Searches for a product in the current sale items using its unique product ID
+ * and updates its quantity with the provided value.
+ *
+ * The quantity must be greater than zero. If the product is found and the
+ * quantity is valid, the item is updated and the function returns true.
+ *
+ * @param productId Unique identifier of the product to update.
+ * @param quantity New quantity value for the product.
+ *
+ * @return true If the product quantity was successfully updated.
+ * @return false If the quantity is invalid or the product was not found.
+ */
+bool Sale::updateQuantity(int productId, double quantity)
+{
+    if (quantity <= 0)
+        return false;
+
+    for (SaleItem &item : m_items)
+    {
+        if (item.product.id == productId)
+        {
+            item.quantity = quantity;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @brief Updates the unit price of a product in the current sale.
+ *
+ * Searches for a product in the current sale items using its unique product ID
+ * and updates the sale price with the provided value.
+ *
+ * The price cannot be negative. If the product is found and the price is valid,
+ * the item price is updated and the function returns true.
+ *
+ * @param productId Unique identifier of the product to update.
+ * @param price New unit price value for the product.
+ *
+ * @return true If the product price was successfully updated.
+ * @return false If the price is invalid or the product was not found.
+ */
+bool Sale::updateUnitPrice(int productId, double price)
+{
+    if (price < 0.0)
+        return false;
+
+    for (SaleItem &item : m_items)
+    {
+        if (item.product.id == productId)
+        {
+            item.product.sale_price = price;
+            return true;
+        }
+    }
+
+    return false;
+}
