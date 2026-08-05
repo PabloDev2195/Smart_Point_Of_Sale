@@ -87,6 +87,12 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="decimals">
+    <number>2</number>
+   </property>
+   <property name="maximum">
+    <double>10000.989999999999782</double>
+   </property>
   </widget>
   <widget class="QDoubleSpinBox" name="doubleSpinBox_SellPrice">
    <property name="geometry">
@@ -96,6 +102,9 @@
      <width>221</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <double>10000.989999999999782</double>
    </property>
   </widget>
   <widget class="QLabel" name="label_Name">
