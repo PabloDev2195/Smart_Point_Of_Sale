@@ -21,7 +21,7 @@ struct SaleItem
     /**
      * @brief Number of units of the product.
      */
-    int quantity;
+    double quantity;
 };
 
 /**
