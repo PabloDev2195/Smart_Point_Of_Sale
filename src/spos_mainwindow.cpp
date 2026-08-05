@@ -475,4 +475,6 @@ void SPOS_MainWindow::onSaleItemChanged(int row, int column)
     ui->tableWidget_Products->blockSignals(false);
 
     updateSaleTotal();
+
+    ui->lineEdit_Barcode->setFocus();
 }
