@@ -4,13 +4,17 @@ project(Smart_Point_Of_Sale LANGUAGES CXX)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Sql)
 
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 qt_standard_project_setup()
 
 qt_add_executable(Smart_Point_Of_Sale
     WIN32 MACOSX_BUNDLE
+    app.rc
+
     src/main.cpp
 
+    resources/resources.qrc
     src/spos_mainwindow.cpp
     src/spos_mainwindow.h
     src/spos_mainwindow.ui

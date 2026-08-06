@@ -7,6 +7,10 @@
 #include "../src/product/product_mgr.h"
 #include <QMessageBox>
 
+#include <QDirIterator>
+#include <QDebug>
+#include <QIcon>
+
 /**
  * @brief Constructor of the main application window.
  *
@@ -21,6 +25,28 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     , ui(new Ui::SPOS_MainWindow)
 {
     ui->setupUi(this);
+
+
+    ui->pushButton_NewSale->setIcon(
+        QIcon(":/resources/icons8-sell-100.png"));
+
+    ui->pushButton_RemoveProduct->setIcon(
+        QIcon(":/resources/icons8-minus-96.png"));
+
+    ui->pushButton_CancelSale->setIcon(
+        QIcon(":/resources/icons8-delete-96.png"));
+
+    ui->pushButton_FindProduct->setIcon(
+        QIcon(":/resources/icons8-find-96.png"));
+
+    ui->action_AddNewProduct->setIcon(
+        QIcon(":/resources/icons8-add-96.png"));
+
+    ui->action_ModifyProduct->setIcon(
+        QIcon(":/resources/icons8-pencil-96.png"));
+
+    ui->action_DeleteProduct->setIcon(
+        QIcon(":/resources/icons8-remove-80.png"));
 
     connect(ui->tableWidget_Products,
             &QTableWidget::cellChanged,
@@ -257,6 +283,13 @@ void SPOS_MainWindow::updateSaleTable()
             Qt::ItemIsSelectable |
             Qt::ItemIsEnabled |
             Qt::ItemIsEditable);
+
+        ui->tableWidget_Products->item(row,0)->setTextAlignment(Qt::AlignCenter);
+        ui->tableWidget_Products->item(row,1)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        ui->tableWidget_Products->item(row,2)->setTextAlignment(Qt::AlignCenter);
+        ui->tableWidget_Products->item(row,3)->setTextAlignment(Qt::AlignCenter);
+        ui->tableWidget_Products->item(row,4)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        ui->tableWidget_Products->item(row,5)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     }
 
     ui->tableWidget_Products->blockSignals(false);
