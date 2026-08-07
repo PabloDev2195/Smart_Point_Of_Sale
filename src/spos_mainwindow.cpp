@@ -4,6 +4,7 @@
 #include "../src/dialog/dialog_modifyproduct.h"
 #include "../src/dialog/dialog_deleteproduct.h"
 #include "../src/dialog/dialog_findproduct.h"
+#include "../src/dialog/dialog_payment.h"
 #include "../src/product/product_mgr.h"
 #include <QMessageBox>
 
@@ -26,10 +27,6 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
-    ui->pushButton_NewSale->setIcon(
-        QIcon(":/resources/icons8-sell-100.png"));
-
     ui->pushButton_RemoveProduct->setIcon(
         QIcon(":/resources/icons8-minus-96.png"));
 
@@ -39,14 +36,20 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     ui->pushButton_FindProduct->setIcon(
         QIcon(":/resources/icons8-find-96.png"));
 
-    ui->action_AddNewProduct->setIcon(
+    ui->pushButton_AddNewProduct->setIcon(
         QIcon(":/resources/icons8-add-96.png"));
 
-    ui->action_ModifyProduct->setIcon(
+    ui->pushButton_ModifyProduct->setIcon(
         QIcon(":/resources/icons8-pencil-96.png"));
 
-    ui->action_DeleteProduct->setIcon(
+    ui->pushButton_DeleteProduct->setIcon(
         QIcon(":/resources/icons8-remove-80.png"));
+
+    ui->pushButton_Payment->setIcon(
+        QIcon(":/resources/icons8-payment-100.png"));
+
+    ui->pushButton_FinishSale->setIcon(
+        QIcon(":/resources/icons8-ok-80.png"));
 
     connect(ui->tableWidget_Products,
             &QTableWidget::cellChanged,
@@ -69,6 +72,16 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     ui->tableWidget_Products->horizontalHeader()->setSectionResizeMode(
         2, QHeaderView::Stretch);
 
+    timer = new QTimer(this);
+
+    connect(timer, &QTimer::timeout, this, [=](){
+        ui->label_UpdateDate->setText(
+            QDateTime::currentDateTime().toString("dd/MM/yyyy hh:mm:ss")
+            );
+    });
+
+    timer->start(1000);
+
     ui->lineEdit_Barcode->setFocus();
 }
 
@@ -89,7 +102,7 @@ SPOS_MainWindow::~SPOS_MainWindow()
  * in the database. After closing the dialog, the barcode input field is
  * focused again to continue scanning products.
  */
-void SPOS_MainWindow::on_action_AddNewProduct_triggered()
+void SPOS_MainWindow::on_pushButton_AddNewProduct_clicked()
 {
     Dialog_AddProduct dialog(this);
 
@@ -104,11 +117,44 @@ void SPOS_MainWindow::on_action_AddNewProduct_triggered()
  * Displays the Modify Product dialog that allows the user to search and
  * update product information stored in the database.
  */
-void SPOS_MainWindow::on_action_ModifyProduct_triggered()
+void SPOS_MainWindow::on_pushButton_ModifyProduct_clicked()
 {
     Dialog_ModifyProduct dialog(this);
 
     dialog.exec();
+
+    ui->lineEdit_Barcode->setFocus();
+}
+
+/**
+ * @brief Opens the payment dialog and updates the payment information.
+ *
+ * Retrieves the current sale total and passes it to the payment dialog.
+ * The dialog allows the user to enter the amount received from the customer
+ * and calculates the corresponding change.
+ *
+ * Once the dialog is closed, the received payment and calculated change
+ * are displayed in the main window.
+ *
+ * Finally, the barcode input field is focused again to allow the next
+ * product to be scanned.
+ */
+void SPOS_MainWindow::on_pushButton_Payment_clicked()
+{
+    double total = m_sale.getTotal();
+
+    Dialog_Payment dialog(total, this);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        ui->label_Payment->setText(
+            QString("$ %1").arg(dialog.getPayment(), 0, 'f', 2)
+            );
+
+        ui->label_Change->setText(
+            QString("$ %1").arg(dialog.getChange(), 0, 'f', 2)
+            );
+    }
 
     ui->lineEdit_Barcode->setFocus();
 }
@@ -119,7 +165,7 @@ void SPOS_MainWindow::on_action_ModifyProduct_triggered()
  * Displays the Delete Product dialog where the user can search and remove
  * an existing product from the database.
  */
-void SPOS_MainWindow::on_action_DeleteProduct_triggered()
+void SPOS_MainWindow::on_pushButton_DeleteProduct_clicked()
 {
     Dialog_DeleteProduct dialog(this);
 
@@ -305,50 +351,9 @@ void SPOS_MainWindow::updateSaleTotal()
 {
     double totalSale = m_sale.getTotal();
 
-    ui->lineEdit_Total->setText(
+    ui->label_TotalNum->setText(
         QString("$ %1").arg(totalSale, 0, 'f', 2)
         );
-}
-
-/**
- * @brief Calculates and displays the customer's change.
- *
- * Retrieves the amount of money received from the customer, converts it
- * from text to a numeric value and calculates the difference between the
- * received amount and the total sale amount.
- *
- * The calculated change is displayed in the exchange field. After the
- * calculation, the barcode input field is focused again to continue the
- * sales process.
- *
- * If the received amount field is empty, the function returns without
- * performing any calculation.
- */
-void SPOS_MainWindow::on_lineEdit_Received_returnPressed()
-{
-    QString receivedText = ui->lineEdit_Received->text().trimmed();
-
-    if(receivedText.isEmpty())
-        return;
-
-    double receivedMoney = receivedText.toDouble();
-
-    if(receivedMoney >= m_sale.getTotal())
-    {
-        double exchange = receivedMoney - m_sale.getTotal();
-        ui->lineEdit_Exchange->setText(
-            QString("$ %1").arg(exchange, 0, 'f', 2));
-    }
-    else
-    {
-        QMessageBox::warning(
-            this,
-            "Falta Dinero",
-            "Falta dinero para cubrir la cuenta a pagar."
-            );
-    }
-
-    ui->lineEdit_Barcode->setFocus();
 }
 
 /**
@@ -358,7 +363,7 @@ void SPOS_MainWindow::on_lineEdit_Received_returnPressed()
  * displayed total amount and resets the sale-related user interface to
  * prepare for a new transaction.
  */
-void SPOS_MainWindow::on_pushButton_NewSale_clicked()
+void SPOS_MainWindow::on_pushButton_FinishSale_clicked()
 {
     m_sale.clear();
     updateSaleTable();
@@ -402,9 +407,12 @@ void SPOS_MainWindow::on_pushButton_CancelSale_clicked()
  */
 void SPOS_MainWindow::resetSaleUI()
 {
-    ui->lineEdit_Total->clear();
-    ui->lineEdit_Received->clear();
-    ui->lineEdit_Exchange->clear();
+    ui->label_TotalNum->setText(
+        QString("$ 0.00"));
+    ui->label_Change->setText(
+        QString("$ 0.00"));
+    ui->label_Payment->setText(
+        QString("$ 0.00"));
     ui->lineEdit_Barcode->clear();
 
     ui->lineEdit_Barcode->setFocus();
