@@ -12,6 +12,7 @@
 #include <QMainWindow>
 #include "../src/models/Product.h"
 #include "../src/sale/sale_mgr.h"
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -85,21 +86,28 @@ class SPOS_MainWindow : public QMainWindow
          */
         void resetSaleUI();
 
+        QTimer *timer;
+
     private slots:
         /**
          * @brief Opens the Add Product dialog.
          */
-        void on_action_AddNewProduct_triggered();
+        void on_pushButton_AddNewProduct_clicked();
+
+        /**
+         * @brief Opens the Payment dialog.
+         */
+        void on_pushButton_Payment_clicked();
 
         /**
          * @brief Opens the Modify Product dialog.
          */
-        void on_action_ModifyProduct_triggered();
+        void on_pushButton_ModifyProduct_clicked();
 
         /**
          * @brief Opens the Delete Product dialog.
          */
-        void on_action_DeleteProduct_triggered();
+        void on_pushButton_DeleteProduct_clicked();
 
         /**
          * @brief Opens the Find Product dialog.
@@ -115,17 +123,9 @@ class SPOS_MainWindow : public QMainWindow
         void on_lineEdit_Barcode_returnPressed();
 
         /**
-         * @brief Handles the received money input.
-         *
-         * Calculates the customer's change based on the received amount and the
-         * current sale total.
-         */
-        void on_lineEdit_Received_returnPressed();
-
-        /**
          * @brief Starts a new sale transaction.
          */
-        void on_pushButton_NewSale_clicked();
+        void on_pushButton_FinishSale_clicked();
 
         /**
          * @brief Cancels the current sale.
