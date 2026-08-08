@@ -366,16 +366,14 @@ void SPOS_MainWindow::updateSaleTotal()
  */
 void SPOS_MainWindow::on_pushButton_FinishSale_clicked()
 {
-    double total = m_sale.getTotal();
-
-    if(total <= 0)
+    if(m_sale.getTotal() <= 0)
     {
         return;
     }
 
     SaleDatabase saleDatabase;
 
-    if(!saleDatabase.saveSale(total))
+    if(!saleDatabase.saveSale(m_sale))
     {
         qDebug() << "Failed to save sale.";
         return;

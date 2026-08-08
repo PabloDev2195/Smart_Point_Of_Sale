@@ -6,30 +6,47 @@
 #include <QDebug>
 
 /**
- * @brief Saves a completed sale to the database.
+ * @brief Saves a completed sale and its items to the database.
  *
  * Generates the next ticket number automatically and stores
- * the sale date, total amount, gross profit, and net profit.
+ * the sale information in the sales table. The products included
+ * in the sale are then stored in the sale_items table.
  *
- * @param total Total amount of the completed sale.
+ * The operation is executed inside a database transaction.
+ * If any operation fails, all changes are rolled back.
  *
- * @return true if the sale was successfully saved.
- * @return false if the database operation failed.
+ * @param sale Completed sale containing its products and total.
+ *
+ * @return true if the sale and all its items were successfully saved.
+ * @return false if any database operation failed.
  */
-bool SaleDatabase::saveSale(double total)
+bool SaleDatabase::saveSale(const Sale& sale)
 {
+    QSqlDatabase database = QSqlDatabase::database();
+
+    if(!database.transaction())
+    {
+        qDebug() << "Failed to start database transaction:"
+                 << database.lastError().text();
+
+        return false;
+    }
+
     QSqlQuery query;
+
+    double total = sale.getTotal();
 
     query.prepare(
         "SELECT COALESCE(MAX(ticket_number), 0) + 1 "
         "FROM sales"
-    );
+        );
 
     if(!query.exec() || !query.next())
     {
         qDebug() << "Ticket number error:"
                  << query.lastError().text();
 
+        database.rollback();
         return false;
     }
 
@@ -39,7 +56,7 @@ bool SaleDatabase::saveSale(double total)
         "INSERT INTO sales "
         "(ticket_number, sale_date, total, gross_profit, net_profit) "
         "VALUES (?, ?, ?, ?, ?)"
-    );
+        );
 
     query.addBindValue(ticketNumber);
     query.addBindValue(
@@ -53,6 +70,45 @@ bool SaleDatabase::saveSale(double total)
         qDebug() << "Save sale error:"
                  << query.lastError().text();
 
+        database.rollback();
+        return false;
+    }
+
+    int saleId = query.lastInsertId().toInt();
+
+    for(const SaleItem& item : sale.getItems())
+    {
+        double subtotal =
+            item.quantity * item.product.sale_price;
+
+        query.prepare(
+            "INSERT INTO sale_items "
+            "(sale_id, product_id, quantity, unit_price, subtotal) "
+            "VALUES (?, ?, ?, ?, ?)"
+            );
+
+        query.addBindValue(saleId);
+        query.addBindValue(item.product.id);
+        query.addBindValue(item.quantity);
+        query.addBindValue(item.product.sale_price);
+        query.addBindValue(subtotal);
+
+        if(!query.exec())
+        {
+            qDebug() << "Save sale item error:"
+                     << query.lastError().text();
+
+            database.rollback();
+            return false;
+        }
+    }
+
+    if(!database.commit())
+    {
+        qDebug() << "Failed to commit sale:"
+                 << database.lastError().text();
+
+        database.rollback();
         return false;
     }
 
