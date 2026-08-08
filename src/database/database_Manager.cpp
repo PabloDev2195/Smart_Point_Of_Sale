@@ -75,7 +75,7 @@ bool DatabaseManager::openDatabase()
 /**
  * @brief Creates the database tables.
  *
- * Currently creates the products table if it does not exist.
+ * Creates the products and sales tables if they do not exist.
  *
  * @return true if all tables were created successfully.
  * @return false if any SQL statement failed.
@@ -83,24 +83,42 @@ bool DatabaseManager::openDatabase()
 bool DatabaseManager::createTables()
 {
     QSqlQuery query;
-	bool bCreateTable = true;
+    bool bCreateTable = true;
 
     QString productsTable =
         "CREATE TABLE IF NOT EXISTS products ("
-		"id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "barcode TEXT UNIQUE,"
         "name TEXT NOT NULL,"
         "purchase_price REAL NOT NULL,"
         "sale_price REAL NOT NULL"
         ")";
 
-
     if(!query.exec(productsTable))
     {
-        qDebug() << query.lastError().text();
+        qDebug() << "Products table error:"
+                 << query.lastError().text();
+
         bCreateTable = false;
     }
 
+    QString salesTable =
+        "CREATE TABLE IF NOT EXISTS sales ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "ticket_number INTEGER NOT NULL UNIQUE,"
+        "sale_date TEXT NOT NULL,"
+        "total REAL NOT NULL DEFAULT 0.0,"
+        "gross_profit REAL NOT NULL DEFAULT 0.0,"
+        "net_profit REAL NOT NULL DEFAULT 0.0"
+        ")";
+
+    if(!query.exec(salesTable))
+    {
+        qDebug() << "Sales table error:"
+                 << query.lastError().text();
+
+        bCreateTable = false;
+    }
 
     return bCreateTable;
 }
