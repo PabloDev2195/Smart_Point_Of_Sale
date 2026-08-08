@@ -12,6 +12,7 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QVariant>
+#include <QDateTime>
 
 /**
  * @brief Returns the singleton instance of ProductManager.

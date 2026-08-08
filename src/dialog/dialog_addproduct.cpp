@@ -1,7 +1,7 @@
 #include "dialog_addproduct.h"
 #include "ui_dialog_addproduct.h"
 #include "../models/Product.h"
-#include "../product/product_mgr.h"
+#include "../product_database/product_mgr.h"
 #include <QMessageBox>
 
 /**
