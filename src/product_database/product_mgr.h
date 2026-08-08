@@ -87,7 +87,6 @@ public:
      */
     QList<Product> findProducts(const QString& barcode,
                                 const QString& name);
-
 private:
     /**
      * @brief Default constructor.

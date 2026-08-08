@@ -1,6 +1,6 @@
 #include "dialog_findproduct.h"
 #include "ui_dialog_findproduct.h"
-#include "../product/product_mgr.h"
+#include "../product_database/product_mgr.h"
 #include <QHeaderView>
 #include <QMessageBox>
 

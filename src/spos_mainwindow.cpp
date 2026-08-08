@@ -5,7 +5,8 @@
 #include "../src/dialog/dialog_deleteproduct.h"
 #include "../src/dialog/dialog_findproduct.h"
 #include "../src/dialog/dialog_payment.h"
-#include "../src/product/product_mgr.h"
+#include "../src/product_database/product_mgr.h"
+#include "../src/sale_database/sale_database.h"
 #include <QMessageBox>
 
 #include <QDirIterator>
@@ -365,6 +366,21 @@ void SPOS_MainWindow::updateSaleTotal()
  */
 void SPOS_MainWindow::on_pushButton_FinishSale_clicked()
 {
+    double total = m_sale.getTotal();
+
+    if(total <= 0)
+    {
+        return;
+    }
+
+    SaleDatabase saleDatabase;
+
+    if(!saleDatabase.saveSale(total))
+    {
+        qDebug() << "Failed to save sale.";
+        return;
+    }
+
     m_sale.clear();
     updateSaleTable();
     updateSaleTotal();

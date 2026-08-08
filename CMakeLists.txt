@@ -40,14 +40,14 @@ qt_add_executable(Smart_Point_Of_Sale
     src/database/database_manager.cpp
     src/database/database_manager.h
 
-    src/repositories/productRepository.cpp
-    src/repositories/productRepository.h
-
-    src/product/product_mgr.h
-    src/product/product_mgr.cpp
+    src/product_database/product_mgr.h
+    src/product_database/product_mgr.cpp
 
     src/sale/sale_mgr.h
     src/sale/sale_mgr.cpp
+
+    src/sale_database/sale_database.h
+    src/sale_database/sale_database.cpp
 )
 
 target_link_libraries(Smart_Point_Of_Sale

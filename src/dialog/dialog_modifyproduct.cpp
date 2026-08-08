@@ -1,6 +1,6 @@
 #include "dialog_modifyproduct.h"
 #include "ui_dialog_modifyproduct.h"
-#include "../product/product_mgr.h"
+#include "../product_database/product_mgr.h"
 #include <QMessageBox>
 
 /**
