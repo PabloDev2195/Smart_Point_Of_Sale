@@ -1,6 +1,7 @@
 #ifndef SALE_DATABASE_H
 #define SALE_DATABASE_H
 
+#include "../sale/sale_mgr.h"
 /**
  * @brief Provides database operations for sales.
  *
@@ -12,20 +13,14 @@ class SaleDatabase
 public:
 
     /**
-     * @brief Saves a completed sale to the database.
+     * @brief Saves a completed sale and its items to the database.
      *
-     * Generates the next ticket number automatically and stores
-     * the sale date, total amount, gross profit, and net profit.
-     *
-     * Gross and net profit are initialized to zero and will be
-     * calculated in later functionality.
-     *
-     * @param total Total amount of the completed sale.
+     * @param sale Completed sale to be stored.
      *
      * @return true if the sale was successfully saved.
      * @return false if the database operation failed.
      */
-    bool saveSale(double total);
+    bool saveSale(const Sale& sale);
 };
 
 #endif // SALE_DATABASE_H
