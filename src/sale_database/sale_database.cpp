@@ -36,6 +36,15 @@ bool SaleDatabase::saveSale(const Sale& sale)
 
     double total = sale.getTotal();
 
+    double grossProfit = 0.0;
+
+    for(const SaleItem& item : sale.getItems())
+    {
+        grossProfit +=
+            (item.product.sale_price - item.product.purchase_price)
+            * item.quantity;
+    }
+
     query.prepare(
         "SELECT COALESCE(MAX(ticket_number), 0) + 1 "
         "FROM sales"
@@ -62,7 +71,7 @@ bool SaleDatabase::saveSale(const Sale& sale)
     query.addBindValue(
         QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss"));
     query.addBindValue(total);
-    query.addBindValue(0.0);
+    query.addBindValue(grossProfit);
     query.addBindValue(0.0);
 
     if(!query.exec())
