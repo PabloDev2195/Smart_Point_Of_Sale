@@ -73,6 +73,19 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     ui->tableWidget_Products->horizontalHeader()->setSectionResizeMode(
         2, QHeaderView::Stretch);
 
+    ui->tableWidget_Tickets->setColumnCount(3);
+
+    ui->tableWidget_Tickets->setHorizontalHeaderLabels({
+        "ID",
+        "Fecha",
+        "Total",
+    });
+
+    ui->tableWidget_Tickets->setColumnWidth(1, 210);
+
+    ui->tableWidget_Tickets->horizontalHeader()->setSectionResizeMode(
+        2, QHeaderView::Stretch);
+
     timer = new QTimer(this);
 
     connect(timer, &QTimer::timeout, this, [=](){
