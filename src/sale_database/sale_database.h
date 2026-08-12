@@ -21,6 +21,17 @@ public:
      * @return false if the database operation failed.
      */
     bool saveSale(const CurrentSale& sale);
+
+    /**
+     * @brief Returns the last ticket number stored in the database.
+     *
+     * Retrieves the highest ticket number currently stored in the
+     * sales table. If no sales exist, the function returns 0.
+     *
+     * @return The last ticket number stored in the database,
+     *         or 0 if no tickets exist.
+     */
+    int getLastTicketNumber();
 };
 
 #endif // SALE_DATABASE_H

@@ -38,6 +38,16 @@ public:
      */
     bool createTables();
 
+    /**
+     * @brief Returns the current SQLite database connection.
+     *
+     * Provides access to the database connection managed by the
+     * DatabaseManager singleton.
+     *
+     * @return The current QSqlDatabase connection.
+     */
+    QSqlDatabase getDatabase() const;
+
 private:
 
     /**
