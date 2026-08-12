@@ -143,3 +143,16 @@ bool DatabaseManager::createTables()
 
     return bCreateTable;
 }
+
+/**
+ * @brief Returns the current SQLite database connection.
+ *
+ * Provides access to the database connection managed by the
+ * DatabaseManager singleton.
+ *
+ * @return The current QSqlDatabase connection.
+ */
+QSqlDatabase DatabaseManager::getDatabase() const
+{
+    return database;
+}

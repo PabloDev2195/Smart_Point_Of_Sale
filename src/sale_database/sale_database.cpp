@@ -1,5 +1,7 @@
 #include "sale_database.h"
 
+#include "../database/database_Manager.h"
+
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDateTime>
@@ -128,4 +130,37 @@ bool SaleDatabase::saveSale(const CurrentSale& sale)
              << total;
 
     return true;
+}
+
+/**
+ * @brief Returns the last ticket number stored in the database.
+ *
+ * Queries the sales table and retrieves the highest ticket number
+ * currently stored. If no sales exist, the function returns 0.
+ *
+ * The database connection is obtained from DatabaseManager.
+ *
+ * @return The last ticket number stored in the database,
+ *         or 0 if no tickets exist or an error occurs.
+ */
+int SaleDatabase::getLastTicketNumber()
+{
+    QSqlQuery query(DatabaseManager::instance().getDatabase());
+
+    if (!query.exec(
+            "SELECT COALESCE(MAX(ticket_number), 0) "
+            "FROM sales"))
+    {
+        qDebug() << "Error getting last ticket:"
+                 << query.lastError().text();
+
+        return 0;
+    }
+
+    if (query.next())
+    {
+        return query.value(0).toInt() + 1;
+    }
+
+    return 0;
 }
