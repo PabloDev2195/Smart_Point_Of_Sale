@@ -20,7 +20,7 @@
  * @return true if the sale and all its items were successfully saved.
  * @return false if any database operation failed.
  */
-bool SaleDatabase::saveSale(const Sale& sale)
+bool SaleDatabase::saveSale(const CurrentSale& sale)
 {
     QSqlDatabase database = QSqlDatabase::database();
 

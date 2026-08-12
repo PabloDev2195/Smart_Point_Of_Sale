@@ -11,7 +11,7 @@
 
 #include <QMainWindow>
 #include "../src/models/Product.h"
-#include "../src/sale/sale_mgr.h"
+#include "../src/current_sale/current_sale.h"
 #include <QTimer>
 
 QT_BEGIN_NAMESPACE
@@ -58,7 +58,7 @@ class SPOS_MainWindow : public QMainWindow
          * current transaction. The Sale object manages the sale data while the
          * main window is responsible for displaying it.
          */
-        Sale m_sale;
+        CurrentSale m_currentsale;
         /**
          * @brief Pointer to the generated UI object.
          *

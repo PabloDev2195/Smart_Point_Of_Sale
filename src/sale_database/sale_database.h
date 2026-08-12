@@ -1,7 +1,7 @@
 #ifndef SALE_DATABASE_H
 #define SALE_DATABASE_H
 
-#include "../sale/sale_mgr.h"
+#include "../current_sale/current_sale.h"
 /**
  * @brief Provides database operations for sales.
  *
@@ -20,7 +20,7 @@ public:
      * @return true if the sale was successfully saved.
      * @return false if the database operation failed.
      */
-    bool saveSale(const Sale& sale);
+    bool saveSale(const CurrentSale& sale);
 };
 
 #endif // SALE_DATABASE_H

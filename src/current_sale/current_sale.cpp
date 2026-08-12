@@ -1,4 +1,4 @@
-#include "Sale_mgr.h"
+#include "current_sale.h"
 
 /**
  * @brief Adds a product to the current sale.
@@ -10,7 +10,7 @@
  *
  * @param product Product to be added to the sale.
  */
-void Sale::addProduct(const Product& product)
+void CurrentSale::addProduct(const Product& product)
 {
     for (SaleItem &item : m_items)
     {
@@ -37,7 +37,7 @@ void Sale::addProduct(const Product& product)
  *
  * @return QList<SaleItem> List of sale items.
  */
-QList<SaleItem> Sale::getItems() const
+QList<SaleItem> CurrentSale::getItems() const
 {
     return m_items;
 }
@@ -50,7 +50,7 @@ QList<SaleItem> Sale::getItems() const
  *
  * @return double Total amount of the current sale.
  */
-double Sale::getTotal() const
+double CurrentSale::getTotal() const
 {
     double total = 0.0;
 
@@ -67,7 +67,7 @@ double Sale::getTotal() const
  *
  * Removes all items stored in the current transaction.
  */
-void Sale::clear()
+void CurrentSale::clear()
 {
     m_items.clear();
 }
@@ -80,7 +80,7 @@ void Sale::clear()
  *
  * @param productId Unique identifier of the product to remove.
  */
-void Sale::removeProduct(int productId)
+void CurrentSale::removeProduct(int productId)
 {
     for (int i = 0; i < m_items.size(); ++i)
     {
@@ -107,7 +107,7 @@ void Sale::removeProduct(int productId)
  * @return true If the product quantity was successfully updated.
  * @return false If the quantity is invalid or the product was not found.
  */
-bool Sale::updateQuantity(int productId, double quantity)
+bool CurrentSale::updateQuantity(int productId, double quantity)
 {
     if (quantity <= 0)
         return false;
@@ -139,7 +139,7 @@ bool Sale::updateQuantity(int productId, double quantity)
  * @return true If the product price was successfully updated.
  * @return false If the price is invalid or the product was not found.
  */
-bool Sale::updateUnitPrice(int productId, double price)
+bool CurrentSale::updateUnitPrice(int productId, double price)
 {
     if (price < 0.0)
         return false;

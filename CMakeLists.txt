@@ -43,8 +43,8 @@ qt_add_executable(Smart_Point_Of_Sale
     src/product_database/product_mgr.h
     src/product_database/product_mgr.cpp
 
-    src/sale/sale_mgr.h
-    src/sale/sale_mgr.cpp
+    src/current_sale/current_sale.h
+    src/current_sale/current_sale.cpp
 
     src/sale_database/sale_database.h
     src/sale_database/sale_database.cpp
