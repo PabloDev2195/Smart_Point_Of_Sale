@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1064</width>
-    <height>746</height>
+    <width>1920</width>
+    <height>1080</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Smart Point Of Sale V1.0</string>
+   <string>Smart Point Of Sale V1.0.0</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_CancelSale">
@@ -53,8 +53,8 @@
    <widget class="QLabel" name="label_Total">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>620</y>
+      <x>850</x>
+      <y>690</y>
       <width>63</width>
       <height>20</height>
      </rect>
@@ -71,8 +71,8 @@
    <widget class="QLabel" name="label_Received">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>650</y>
+      <x>820</x>
+      <y>720</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -89,8 +89,8 @@
    <widget class="QLabel" name="label_Exchange">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>680</y>
+      <x>830</x>
+      <y>750</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -128,7 +128,7 @@
       <x>180</x>
       <y>140</y>
       <width>871</width>
-      <height>441</height>
+      <height>511</height>
      </rect>
     </property>
    </widget>
@@ -242,7 +242,7 @@
      </font>
     </property>
     <property name="text">
-     <string>0</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_SaleTools">
@@ -268,7 +268,7 @@
      <rect>
       <x>10</x>
       <y>90</y>
-      <width>1031</width>
+      <width>1511</width>
       <height>16</height>
      </rect>
     </property>
@@ -281,7 +281,7 @@
      <rect>
       <x>180</x>
       <y>110</y>
-      <width>141</width>
+      <width>221</width>
       <height>20</height>
      </rect>
     </property>
@@ -291,7 +291,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Lista de Venta</string>
+     <string>Productos de la Venta</string>
     </property>
    </widget>
    <widget class="Line" name="line_2">
@@ -300,7 +300,7 @@
       <x>150</x>
       <y>110</y>
       <width>20</width>
-      <height>581</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="orientation">
@@ -333,7 +333,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>410</y>
+      <y>470</y>
       <width>161</width>
       <height>20</height>
      </rect>
@@ -351,7 +351,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>500</y>
+      <y>560</y>
       <width>141</width>
       <height>29</height>
      </rect>
@@ -369,7 +369,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>550</y>
+      <y>610</y>
       <width>141</width>
       <height>29</height>
      </rect>
@@ -387,7 +387,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>450</y>
+      <y>510</y>
       <width>141</width>
       <height>29</height>
      </rect>
@@ -405,7 +405,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>610</y>
+      <y>680</y>
       <width>181</width>
       <height>61</height>
      </rect>
@@ -429,7 +429,7 @@
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>610</y>
+      <y>680</y>
       <width>171</width>
       <height>61</height>
      </rect>
@@ -453,7 +453,7 @@
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>590</y>
+      <y>660</y>
       <width>20</width>
       <height>121</height>
      </rect>
@@ -465,8 +465,8 @@
    <widget class="QLabel" name="label_TotalNum">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>620</y>
+      <x>930</x>
+      <y>690</y>
       <width>63</width>
       <height>20</height>
      </rect>
@@ -483,8 +483,8 @@
    <widget class="QLabel" name="label_Change">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>680</y>
+      <x>930</x>
+      <y>750</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -501,8 +501,8 @@
    <widget class="QLabel" name="label_Payment">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>650</y>
+      <x>930</x>
+      <y>720</y>
       <width>63</width>
       <height>20</height>
      </rect>
@@ -519,8 +519,8 @@
    <widget class="QLabel" name="label_Total_2">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>590</y>
+      <x>830</x>
+      <y>660</y>
       <width>181</width>
       <height>20</height>
      </rect>
@@ -541,7 +541,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>390</y>
+      <y>450</y>
       <width>141</width>
       <height>16</height>
      </rect>
@@ -550,13 +550,54 @@
      <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
+   <widget class="Line" name="line_6">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>110</y>
+      <width>20</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Orientation::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget_Tickets">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>140</y>
+      <width>431</width>
+      <height>511</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_SaleTickets">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>110</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Historial de ventas</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1064</width>
+     <width>1920</width>
      <height>25</height>
     </rect>
    </property>
