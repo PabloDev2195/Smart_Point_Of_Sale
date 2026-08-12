@@ -25,7 +25,7 @@ struct SaleItem
 };
 
 /**
- * @class Sale
+ * @class CurrentSale
  * @brief Manages the current sale transaction.
  *
  * Handles the products added to the current sale, manages product quantities
