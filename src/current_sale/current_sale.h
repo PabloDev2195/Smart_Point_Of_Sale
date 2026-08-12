@@ -1,5 +1,5 @@
-#ifndef SALE_MGR_H
-#define SALE_MGR_H
+#ifndef CURRENT_SALE_H
+#define CURRENT_SALE_H
 
 #include "../models/Product.h"
 #include <QList>
@@ -34,7 +34,7 @@ struct SaleItem
  * The Sale class is independent from the user interface and only manages
  * the business logic of a sale.
  */
-class Sale
+class CurrentSale
 {
 public:
     /**
@@ -104,4 +104,4 @@ private:
     QList<SaleItem> m_items;
 };
 
-#endif // SALE_MGR_H
+#endif // CURRENT_SALE_H

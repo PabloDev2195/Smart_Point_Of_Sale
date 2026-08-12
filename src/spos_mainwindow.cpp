@@ -142,7 +142,7 @@ void SPOS_MainWindow::on_pushButton_ModifyProduct_clicked()
  */
 void SPOS_MainWindow::on_pushButton_Payment_clicked()
 {
-    double total = m_sale.getTotal();
+    double total = m_currentsale.getTotal();
 
     Dialog_Payment dialog(total, this);
 
@@ -191,7 +191,7 @@ void SPOS_MainWindow::on_pushButton_FindProduct_clicked()
         this,
         [this](const Product& product)
         {
-            m_sale.addProduct(product);
+            m_currentsale.addProduct(product);
 
             updateSaleTable();
 
@@ -225,7 +225,7 @@ void SPOS_MainWindow::on_lineEdit_Barcode_returnPressed()
 
     if(!products.isEmpty())
     {
-        m_sale.addProduct(products.first());
+        m_currentsale.addProduct(products.first());
         updateSaleTable();
     }
 
@@ -251,7 +251,7 @@ void SPOS_MainWindow::updateSaleTable()
 
     ui->tableWidget_Products->setRowCount(0);
 
-    for(const SaleItem& item : m_sale.getItems())
+    for(const SaleItem& item : m_currentsale.getItems())
     {
         int row = ui->tableWidget_Products->rowCount();
 
@@ -350,7 +350,7 @@ void SPOS_MainWindow::updateSaleTable()
  */
 void SPOS_MainWindow::updateSaleTotal()
 {
-    double totalSale = m_sale.getTotal();
+    double totalSale = m_currentsale.getTotal();
 
     ui->label_TotalNum->setText(
         QString("$ %1").arg(totalSale, 0, 'f', 2)
@@ -366,20 +366,20 @@ void SPOS_MainWindow::updateSaleTotal()
  */
 void SPOS_MainWindow::on_pushButton_FinishSale_clicked()
 {
-    if(m_sale.getTotal() <= 0)
+    if(m_currentsale.getTotal() <= 0)
     {
         return;
     }
 
     SaleDatabase saleDatabase;
 
-    if(!saleDatabase.saveSale(m_sale))
+    if(!saleDatabase.saveSale(m_currentsale))
     {
         qDebug() << "Failed to save sale.";
         return;
     }
 
-    m_sale.clear();
+    m_currentsale.clear();
     updateSaleTable();
     updateSaleTotal();
     resetSaleUI();
@@ -405,7 +405,7 @@ void SPOS_MainWindow::on_pushButton_CancelSale_clicked()
 
     if (reply == QMessageBox::Yes)
     {
-        m_sale.clear();
+        m_currentsale.clear();
         updateSaleTable();
         updateSaleTotal();
         resetSaleUI();
@@ -460,7 +460,7 @@ void SPOS_MainWindow::on_pushButton_RemoveProduct_clicked()
     int productId =
         ui->tableWidget_Products->item(row, 0)->text().toInt();
 
-    m_sale.removeProduct(productId);
+    m_currentsale.removeProduct(productId);
     updateSaleTable();
     updateSaleTotal();
     ui->lineEdit_Barcode->setFocus();
@@ -508,12 +508,12 @@ void SPOS_MainWindow::onSaleItemChanged(int row, int column)
 
     if (column == 3)
     {
-        if (!m_sale.updateQuantity(productId, quantity))
+        if (!m_currentsale.updateQuantity(productId, quantity))
             return;
     }
     else
     {
-        if (!m_sale.updateUnitPrice(productId, price))
+        if (!m_currentsale.updateUnitPrice(productId, price))
             return;
     }
 
