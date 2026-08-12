@@ -214,6 +214,14 @@ void SPOS_MainWindow::on_pushButton_FindProduct_clicked()
 
     dialog.exec();
 
+    SaleDatabase saleDatabase;
+
+    int lastTicket = saleDatabase.getLastTicketNumber();
+
+    ui->label_UpdateSale->setText(
+        QString("%1").arg(lastTicket, 6, 10, QChar('0'))
+        );
+
     ui->lineEdit_Barcode->setFocus();
 }
 
@@ -243,6 +251,14 @@ void SPOS_MainWindow::on_lineEdit_Barcode_returnPressed()
     }
 
     updateSaleTotal();
+
+    SaleDatabase saleDatabase;
+
+    int lastTicket = saleDatabase.getLastTicketNumber();
+
+    ui->label_UpdateSale->setText(
+        QString("%1").arg(lastTicket, 6, 10, QChar('0'))
+        );
 
     ui->lineEdit_Barcode->clear();
     ui->lineEdit_Barcode->setFocus();
@@ -391,6 +407,12 @@ void SPOS_MainWindow::on_pushButton_FinishSale_clicked()
         qDebug() << "Failed to save sale.";
         return;
     }
+
+    int lastTicket = saleDatabase.getLastTicketNumber();
+
+    ui->label_UpdateSale->setText(
+        QString("%1").arg(lastTicket, 6, 10, QChar('0'))
+        );
 
     m_currentsale.clear();
     updateSaleTable();

@@ -242,7 +242,7 @@
      </font>
     </property>
     <property name="text">
-     <string/>
+     <string>000000</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_SaleTools">
