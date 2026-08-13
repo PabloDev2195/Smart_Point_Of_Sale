@@ -5,6 +5,7 @@
 #include "../src/dialog/dialog_deleteproduct.h"
 #include "../src/dialog/dialog_findproduct.h"
 #include "../src/dialog/dialog_payment.h"
+#include "../src/dialog/dialog_ticket.h"
 #include "../src/product_database/product_mgr.h"
 #include "../src/sale_database/sale_database.h"
 #include <QMessageBox>
@@ -105,6 +106,11 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     ui->dateEdit_To->setDate(QDate::currentDate());
 
     updateDateEditState();
+
+    connect(ui->tableWidget_TicketHistory,
+            &QTableWidget::cellDoubleClicked,
+            this,
+            &SPOS_MainWindow::onTicketDoubleClicked);
 
     ui->lineEdit_Barcode->setFocus();
 }
@@ -715,4 +721,39 @@ void SPOS_MainWindow::loadTicketHistory()
 void SPOS_MainWindow::on_pushButton_Consult_clicked()
 {
     loadTicketHistory();
+}
+
+/**
+ * @brief Opens the details dialog for a selected ticket.
+ *
+ * Retrieves the ticket number from the selected row in the
+ * ticket history table and opens the ticket details dialog.
+ *
+ * The barcode input field is focused again after the dialog
+ * is closed.
+ *
+ * @param row Row containing the selected ticket.
+ * @param column Column where the double-click occurred.
+ */
+void SPOS_MainWindow::onTicketDoubleClicked(int row, int column)
+{
+    Q_UNUSED(column);
+
+    QTableWidgetItem* ticketItem =
+        ui->tableWidget_TicketHistory->item(row, 0);
+
+    if (!ticketItem)
+        return;
+
+    const int ticketNumber =
+        ticketItem->text().toInt();
+
+    qDebug() << "Ticket selected:"
+             << ticketNumber;
+
+    Dialog_Ticket dialog(ticketNumber,this);
+
+    dialog.exec();
+
+    ui->lineEdit_Barcode->setFocus();
 }

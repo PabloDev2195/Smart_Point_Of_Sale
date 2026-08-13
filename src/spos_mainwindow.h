@@ -105,6 +105,17 @@ class SPOS_MainWindow : public QMainWindow
          */
         void updateDateEditState();
 
+        /**
+         * @brief Handles a double-click on a ticket in the history table.
+         *
+         * Retrieves the ticket number from the selected row and opens
+         * the ticket details dialog.
+         *
+         * @param row Row containing the selected ticket.
+         * @param column Column where the double-click occurred.
+         */
+        void onTicketDoubleClicked(int row, int column);
+
         QTimer *timer;
 
     private slots:
