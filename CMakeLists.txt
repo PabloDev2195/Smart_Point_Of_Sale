@@ -34,6 +34,9 @@ qt_add_executable(Smart_Point_Of_Sale
     src/dialog/dialog_payment.h
     src/dialog/dialog_payment.cpp
     src/dialog/dialog_payment.ui
+    src/dialog/dialog_ticket.h
+    src/dialog/dialog_ticket.cpp
+    src/dialog/dialog_ticket.ui
 
     src/models/Product.h
 
