@@ -166,14 +166,91 @@ int SaleDatabase::getLastTicketNumber()
 }
 
 /**
- * @brief Retrieves the sales history from the database.
+ * @brief Retrieves sales history for a specific date range.
  *
- * Returns all stored sales ordered by ticket number in
- * descending order, with the most recent ticket first.
+ * Queries the sales table and returns all sales whose sale date
+ * falls between the specified start and end dates.
  *
- * @return A list containing the stored sales history.
+ * The results are ordered by ticket number in descending order,
+ * with the most recent ticket displayed first.
+ *
+ * @param startDate Start date of the search range.
+ * @param endDate End date of the search range.
+ *
+ * @return A list containing the sales found within the specified
+ *         date range. Returns an empty list if the query fails
+ *         or no sales match the specified dates.
  */
-QList<SaleHistory> SaleDatabase::getSalesHistory()
+QList<SaleHistory> SaleDatabase::getSalesHistory(
+    const QDate& startDate,
+    const QDate& endDate)
+{
+    QList<SaleHistory> salesHistory;
+
+    QSqlQuery query(DatabaseManager::instance().getDatabase());
+
+    query.prepare(
+        "SELECT ticket_number, "
+        "sale_date, "
+        "total, "
+        "gross_profit, "
+        "net_profit "
+        "FROM sales "
+        "WHERE DATE(sale_date) BETWEEN :startDate AND :endDate "
+        "ORDER BY ticket_number DESC");
+
+    query.bindValue(":startDate",
+                    startDate.toString("yyyy-MM-dd"));
+
+    query.bindValue(":endDate",
+                    endDate.toString("yyyy-MM-dd"));
+
+    if (!query.exec())
+    {
+        qDebug() << "Error getting sales history:"
+                 << query.lastError().text();
+
+        return salesHistory;
+    }
+
+    while (query.next())
+    {
+        SaleHistory sale;
+
+        sale.ticketNumber =
+            query.value("ticket_number").toInt();
+
+        sale.saleDate =
+            query.value("sale_date").toString();
+
+        sale.total =
+            query.value("total").toDouble();
+
+        sale.grossProfit =
+            query.value("gross_profit").toDouble();
+
+        sale.netProfit =
+            query.value("net_profit").toDouble();
+
+        salesHistory.append(sale);
+    }
+
+    return salesHistory;
+}
+
+/**
+ * @brief Retrieves all sales history from the database.
+ *
+ * Queries the sales table and returns all stored sales without
+ * applying a date filter.
+ *
+ * The results are ordered by ticket number in descending order,
+ * with the most recent ticket displayed first.
+ *
+ * @return A list containing all stored sales. Returns an empty
+ *         list if the query fails or no sales exist.
+ */
+QList<SaleHistory> SaleDatabase::getAllSalesHistory()
 {
     QList<SaleHistory> salesHistory;
 
@@ -190,7 +267,7 @@ QList<SaleHistory> SaleDatabase::getSalesHistory()
 
     if (!query.exec(sql))
     {
-        qDebug() << "Error getting sales history:"
+        qDebug() << "Error getting all sales history:"
                  << query.lastError().text();
 
         return salesHistory;
@@ -200,11 +277,20 @@ QList<SaleHistory> SaleDatabase::getSalesHistory()
     {
         SaleHistory sale;
 
-        sale.ticketNumber = query.value("ticket_number").toInt();
-        sale.saleDate = query.value("sale_date").toString();
-        sale.total = query.value("total").toDouble();
-        sale.grossProfit = query.value("gross_profit").toDouble();
-        sale.netProfit = query.value("net_profit").toDouble();
+        sale.ticketNumber =
+            query.value("ticket_number").toInt();
+
+        sale.saleDate =
+            query.value("sale_date").toString();
+
+        sale.total =
+            query.value("total").toDouble();
+
+        sale.grossProfit =
+            query.value("gross_profit").toDouble();
+
+        sale.netProfit =
+            query.value("net_profit").toDouble();
 
         salesHistory.append(sale);
     }

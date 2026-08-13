@@ -91,6 +91,20 @@ class SPOS_MainWindow : public QMainWindow
          */
         void loadTicketHistory();
 
+        /**
+         * @brief Updates the enabled state of the date edit controls.
+         *
+         * Enables or disables the date selection controls according to
+         * the filter selected in the history filter combo box.
+         *
+         * The date controls behave as follows:
+         * - Today: Both date controls are disabled.
+         * - Specific Date: The From date control is enabled.
+         * - Date Range: Both date controls are enabled.
+         * - All: Both date controls are disabled.
+         */
+        void updateDateEditState();
+
         QTimer *timer;
 
     private slots:

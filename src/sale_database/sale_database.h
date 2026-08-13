@@ -2,6 +2,7 @@
 #define SALE_DATABASE_H
 
 #include "../current_sale/current_sale.h"
+#include <QDate>
 
 /**
  * @brief Represents a sale record retrieved from the database.
@@ -50,14 +51,30 @@ public:
     int getLastTicketNumber();
 
     /**
-     * @brief Retrieves the sales history from the database.
+     * @brief Retrieves sales history for a specific date range.
+     *
+     * Returns all sales stored in the database whose sale date
+     * falls within the specified date range.
+     *
+     * @param startDate Start date of the search range.
+     * @param endDate End date of the search range.
+     *
+     * @return A list containing the sales history within the
+     *         specified date range.
+     */
+    QList<SaleHistory> getSalesHistory(
+        const QDate& startDate,
+        const QDate& endDate);
+
+    /**
+     * @brief Retrieves all sales history from the database.
      *
      * Returns all stored sales ordered by ticket number in
-     * descending order, with the most recent ticket first.
+     * descending order.
      *
-     * @return A list containing the stored sales history.
+     * @return A list containing all stored sales.
      */
-    QList<SaleHistory> getSalesHistory();
+    QList<SaleHistory> getAllSalesHistory();
 };
 
 #endif // SALE_DATABASE_H

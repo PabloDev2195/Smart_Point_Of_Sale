@@ -96,7 +96,36 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
 
     timer->start(1000);
 
+    connect(ui->comboBox_HistoryFilter,
+            &QComboBox::currentTextChanged,
+            this,
+            &SPOS_MainWindow::updateDateEditState);
+
+    ui->dateEdit_From->setDate(QDate::currentDate());
+    ui->dateEdit_To->setDate(QDate::currentDate());
+
+    updateDateEditState();
+
     ui->lineEdit_Barcode->setFocus();
+}
+
+/**
+ * @brief Updates the enabled state of the date edit controls.
+ *
+ * Enables or disables the date selection controls according to
+ * the filter selected in the history filter combo box.
+ */
+void SPOS_MainWindow::updateDateEditState()
+{
+    const QString filter =
+        ui->comboBox_HistoryFilter->currentText();
+
+    ui->dateEdit_From->setEnabled(
+        filter == "Fecha" ||
+        filter == "Rango de fechas");
+
+    ui->dateEdit_To->setEnabled(
+        filter == "Rango de fechas");
 }
 
 /**
@@ -570,21 +599,73 @@ void SPOS_MainWindow::onSaleItemChanged(int row, int column)
 }
 
 /**
- * @brief Loads the sales history into the ticket history table.
+ * @brief Loads the filtered sales history into the ticket history table.
  *
- * Retrieves the stored sales from the database and displays them
- * in the ticket history table. The ticket number is formatted
- * using six digits, while the sale date and total amount are
- * displayed in their respective columns.
+ * Retrieves sales from the database according to the filter selected
+ * in the history filter combo box.
  *
- * The table is cleared before loading the current sales history.
+ * The available filters are:
+ * - Today: Displays sales from the current date.
+ * - Specific Date: Displays sales from the selected date.
+ * - Date Range: Displays sales between the selected start and end dates.
+ * - All: Displays all stored sales.
+ *
+ * The ticket history table is cleared before the filtered results
+ * are displayed. Ticket numbers are formatted using six digits,
+ * while sale dates and total amounts are displayed in their
+ * respective columns.
+ *
+ * If an invalid date range is selected, where the start date is
+ * later than the end date, the operation is cancelled.
  */
 void SPOS_MainWindow::loadTicketHistory()
 {
-    SaleDatabase m_saleDatabase;
+    SaleDatabase saleDatabase;
 
-    const QList<SaleHistory> salesHistory =
-        m_saleDatabase.getSalesHistory();
+    QList<SaleHistory> salesHistory;
+
+    const QString filter =
+        ui->comboBox_HistoryFilter->currentText();
+
+    if (filter == "Hoy")
+    {
+        const QDate today = QDate::currentDate();
+
+        salesHistory =
+            saleDatabase.getSalesHistory(today, today);
+    }
+    else if (filter == "Fecha")
+    {
+        const QDate date =
+            ui->dateEdit_From->date();
+
+        salesHistory =
+            saleDatabase.getSalesHistory(date, date);
+    }
+    else if (filter == "Rango de fechas")
+    {
+        QDate startDate =
+            ui->dateEdit_From->date();
+
+        QDate endDate =
+            ui->dateEdit_To->date();
+
+        if (startDate > endDate)
+        {
+            qDebug() << "Invalid date range.";
+            return;
+        }
+
+        salesHistory =
+            saleDatabase.getSalesHistory(
+                startDate,
+                endDate);
+    }
+    else if (filter == "Todos")
+    {
+        salesHistory =
+            saleDatabase.getAllSalesHistory();
+    }
 
     ui->tableWidget_TicketHistory->setRowCount(0);
 
@@ -600,19 +681,28 @@ void SPOS_MainWindow::loadTicketHistory()
             0,
             new QTableWidgetItem(
                 QString("%1")
-                    .arg(sale.ticketNumber, 6, 10, QChar('0'))));
+                    .arg(
+                        sale.ticketNumber,
+                        6,
+                        10,
+                        QChar('0'))));
 
         ui->tableWidget_TicketHistory->setItem(
             row,
             1,
-            new QTableWidgetItem(sale.saleDate));
+            new QTableWidgetItem(
+                sale.saleDate));
 
         ui->tableWidget_TicketHistory->setItem(
             row,
             2,
             new QTableWidgetItem(
                 QString("$ %1")
-                    .arg(sale.total, 0, 'f', 2)));
+                    .arg(
+                        sale.total,
+                        0,
+                        'f',
+                        2)));
     }
 }
 

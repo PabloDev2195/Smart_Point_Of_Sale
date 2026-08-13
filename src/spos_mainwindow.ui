@@ -594,14 +594,103 @@
    <widget class="QPushButton" name="pushButton_Consult">
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>750</y>
-      <width>90</width>
+      <x>1090</x>
+      <y>740</y>
+      <width>131</width>
       <height>29</height>
      </rect>
     </property>
     <property name="text">
      <string>Consultar</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_HistoryFilter">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>700</y>
+      <width>131</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Hoy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Fecha</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Rango de fechas</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Todos</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit_From">
+    <property name="geometry">
+     <rect>
+      <x>1240</x>
+      <y>700</y>
+      <width>131</width>
+      <height>29</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit_To">
+    <property name="geometry">
+     <rect>
+      <x>1390</x>
+      <y>700</y>
+      <width>131</width>
+      <height>29</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>670</y>
+      <width>63</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filtro</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>1240</x>
+      <y>670</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Fecha de Inicio</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>1390</x>
+      <y>670</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Fecha de Termino</string>
     </property>
    </widget>
   </widget>
