@@ -2,6 +2,22 @@
 #define SALE_DATABASE_H
 
 #include "../current_sale/current_sale.h"
+
+/**
+ * @brief Represents a sale record retrieved from the database.
+ *
+ * This structure contains the information required to display
+ * a sale in the ticket history.
+ */
+struct SaleHistory
+{
+    int ticketNumber;
+    QString saleDate;
+    double total;
+    double grossProfit;
+    double netProfit;
+};
+
 /**
  * @brief Provides database operations for sales.
  *
@@ -32,6 +48,16 @@ public:
      *         or 0 if no tickets exist.
      */
     int getLastTicketNumber();
+
+    /**
+     * @brief Retrieves the sales history from the database.
+     *
+     * Returns all stored sales ordered by ticket number in
+     * descending order, with the most recent ticket first.
+     *
+     * @return A list containing the stored sales history.
+     */
+    QList<SaleHistory> getSalesHistory();
 };
 
 #endif // SALE_DATABASE_H

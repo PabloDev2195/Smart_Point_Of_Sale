@@ -164,3 +164,50 @@ int SaleDatabase::getLastTicketNumber()
 
     return 0;
 }
+
+/**
+ * @brief Retrieves the sales history from the database.
+ *
+ * Returns all stored sales ordered by ticket number in
+ * descending order, with the most recent ticket first.
+ *
+ * @return A list containing the stored sales history.
+ */
+QList<SaleHistory> SaleDatabase::getSalesHistory()
+{
+    QList<SaleHistory> salesHistory;
+
+    QSqlQuery query(DatabaseManager::instance().getDatabase());
+
+    const QString sql =
+        "SELECT ticket_number, "
+        "sale_date, "
+        "total, "
+        "gross_profit, "
+        "net_profit "
+        "FROM sales "
+        "ORDER BY ticket_number DESC";
+
+    if (!query.exec(sql))
+    {
+        qDebug() << "Error getting sales history:"
+                 << query.lastError().text();
+
+        return salesHistory;
+    }
+
+    while (query.next())
+    {
+        SaleHistory sale;
+
+        sale.ticketNumber = query.value("ticket_number").toInt();
+        sale.saleDate = query.value("sale_date").toString();
+        sale.total = query.value("total").toDouble();
+        sale.grossProfit = query.value("gross_profit").toDouble();
+        sale.netProfit = query.value("net_profit").toDouble();
+
+        salesHistory.append(sale);
+    }
+
+    return salesHistory;
+}

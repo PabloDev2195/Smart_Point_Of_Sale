@@ -86,6 +86,11 @@ class SPOS_MainWindow : public QMainWindow
          */
         void resetSaleUI();
 
+        /**
+         * @brief Loads the sales history into the ticket history table.
+         */
+        void loadTicketHistory();
+
         QTimer *timer;
 
     private slots:
@@ -148,5 +153,10 @@ class SPOS_MainWindow : public QMainWindow
          * @param column Column index of the modified cell.
          */
         void onSaleItemChanged(int row, int column);
+
+        /**
+         * @brief Updates the tickets history table.
+         */
+        void on_pushButton_Consult_clicked();
 };
 #endif // SPOS_MAINWINDOW_H
