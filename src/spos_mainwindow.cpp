@@ -73,17 +73,17 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
     ui->tableWidget_Products->horizontalHeader()->setSectionResizeMode(
         2, QHeaderView::Stretch);
 
-    ui->tableWidget_Tickets->setColumnCount(3);
+    ui->tableWidget_TicketHistory->setColumnCount(3);
 
-    ui->tableWidget_Tickets->setHorizontalHeaderLabels({
+    ui->tableWidget_TicketHistory->setHorizontalHeaderLabels({
         "ID",
         "Fecha",
         "Total",
     });
 
-    ui->tableWidget_Tickets->setColumnWidth(1, 210);
+    ui->tableWidget_TicketHistory->setColumnWidth(1, 210);
 
-    ui->tableWidget_Tickets->horizontalHeader()->setSectionResizeMode(
+    ui->tableWidget_TicketHistory->horizontalHeader()->setSectionResizeMode(
         2, QHeaderView::Stretch);
 
     timer = new QTimer(this);
@@ -567,4 +567,62 @@ void SPOS_MainWindow::onSaleItemChanged(int row, int column)
     updateSaleTotal();
 
     ui->lineEdit_Barcode->setFocus();
+}
+
+/**
+ * @brief Loads the sales history into the ticket history table.
+ *
+ * Retrieves the stored sales from the database and displays them
+ * in the ticket history table. The ticket number is formatted
+ * using six digits, while the sale date and total amount are
+ * displayed in their respective columns.
+ *
+ * The table is cleared before loading the current sales history.
+ */
+void SPOS_MainWindow::loadTicketHistory()
+{
+    SaleDatabase m_saleDatabase;
+
+    const QList<SaleHistory> salesHistory =
+        m_saleDatabase.getSalesHistory();
+
+    ui->tableWidget_TicketHistory->setRowCount(0);
+
+    for (const SaleHistory& sale : salesHistory)
+    {
+        const int row =
+            ui->tableWidget_TicketHistory->rowCount();
+
+        ui->tableWidget_TicketHistory->insertRow(row);
+
+        ui->tableWidget_TicketHistory->setItem(
+            row,
+            0,
+            new QTableWidgetItem(
+                QString("%1")
+                    .arg(sale.ticketNumber, 6, 10, QChar('0'))));
+
+        ui->tableWidget_TicketHistory->setItem(
+            row,
+            1,
+            new QTableWidgetItem(sale.saleDate));
+
+        ui->tableWidget_TicketHistory->setItem(
+            row,
+            2,
+            new QTableWidgetItem(
+                QString("$ %1")
+                    .arg(sale.total, 0, 'f', 2)));
+    }
+}
+
+/**
+ * @brief Handles the Consult button click.
+ *
+ * Refreshes the ticket history table by retrieving
+ * the latest sales information from the database.
+ */
+void SPOS_MainWindow::on_pushButton_Consult_clicked()
+{
+    loadTicketHistory();
 }
