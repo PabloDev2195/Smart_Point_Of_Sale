@@ -297,3 +297,121 @@ QList<SaleHistory> SaleDatabase::getAllSalesHistory()
 
     return salesHistory;
 }
+/**
+ * @brief Retrieves the products associated with a specific ticket.
+ *
+ * Retrieves the product name, quantity, and subtotal for all
+ * items belonging to the specified ticket.
+ *
+ * @param ticketNumber Ticket number used to identify the sale.
+ *
+ * @return A list containing the products associated with the ticket.
+ *         Returns an empty list if the ticket does not exist or
+ *         if the database query fails.
+ */
+QList<SaleItemHistory> SaleDatabase::getSaleItems(int ticketNumber)
+{
+    QList<SaleItemHistory> items;
+
+    QSqlQuery query(DatabaseManager::instance().getDatabase());
+
+    query.prepare(
+        "SELECT products.name, "
+        "sale_items.quantity, "
+        "sale_items.unit_price, "
+        "sale_items.subtotal "
+        "FROM sale_items "
+        "INNER JOIN sales "
+        "ON sale_items.sale_id = sales.id "
+        "INNER JOIN products "
+        "ON sale_items.product_id = products.id "
+        "WHERE sales.ticket_number = :ticketNumber "
+        "ORDER BY sale_items.id");
+
+    query.bindValue(":ticketNumber", ticketNumber);
+
+    if (!query.exec())
+    {
+        qDebug() << "Error getting ticket items:"
+                 << query.lastError().text();
+
+        return items;
+    }
+
+    while (query.next())
+    {
+        SaleItemHistory item;
+
+        item.productName =
+            query.value("name").toString();
+
+        item.quantity =
+            query.value("quantity").toDouble();
+
+        item.subtotal =
+            query.value("subtotal").toDouble();
+
+        items.append(item);
+    }
+
+    return items;
+}
+
+/**
+ * @brief Retrieves the general information of a specific ticket.
+ *
+ * Retrieves the database ID, ticket number, sale date, total amount,
+ * gross profit, and net profit associated with the specified ticket.
+ *
+ * @param ticketNumber Ticket number used to identify the sale.
+ *
+ * @return A SaleHistory object containing the ticket information.
+ *         Returns an empty SaleHistory object if the ticket does not
+ *         exist or if the database query fails.
+ */
+SaleHistory SaleDatabase::getSaleDetails(int ticketNumber)
+{
+    SaleHistory sale{};
+
+    QSqlQuery query(DatabaseManager::instance().getDatabase());
+
+    query.prepare(
+        "SELECT id, "
+        "ticket_number, "
+        "sale_date, "
+        "total, "
+        "gross_profit, "
+        "net_profit "
+        "FROM sales "
+        "WHERE ticket_number = :ticketNumber");
+
+    query.bindValue(":ticketNumber", ticketNumber);
+
+    if (!query.exec())
+    {
+        qDebug() << "Error getting ticket details:"
+                 << query.lastError().text();
+
+        return sale;
+    }
+
+    if (query.next())
+    {
+        sale.ticketNumber =
+            query.value("ticket_number").toInt();
+
+        sale.saleDate =
+            query.value("sale_date").toString();
+
+        sale.total =
+            query.value("total").toDouble();
+
+        sale.grossProfit =
+            query.value("gross_profit").toDouble();
+
+        sale.netProfit =
+            query.value("net_profit").toDouble();
+    }
+
+    return sale;
+}

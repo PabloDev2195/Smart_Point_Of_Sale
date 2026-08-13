@@ -20,6 +20,19 @@ struct SaleHistory
 };
 
 /**
+ * @brief Represents an item stored in a ticket history.
+ *
+ * Contains the product name, quantity sold, and subtotal
+ * associated with a specific ticket.
+ */
+struct SaleItemHistory
+{
+    QString productName;
+    double quantity;
+    double subtotal;
+};
+
+/**
  * @brief Provides database operations for sales.
  *
  * This class is responsible for storing and retrieving
@@ -75,6 +88,35 @@ public:
      * @return A list containing all stored sales.
      */
     QList<SaleHistory> getAllSalesHistory();
+
+    /**
+     * @brief Retrieves the items belonging to a specific ticket.
+     *
+     * Retrieves all products associated with the specified ticket number,
+     * including their quantity, unit price, and subtotal.
+     *
+     * @param ticketNumber Ticket number used to identify the sale.
+     *
+     * @return A list containing the items associated with the ticket.
+     *         Returns an empty list if the ticket does not exist or
+     *         the database query fails.
+     */
+    QList<SaleItemHistory> getSaleItems(int ticketNumber);
+
+    /**
+     * @brief Retrieves the general information of a specific ticket.
+     *
+     * Retrieves the ticket number, sale date, total amount,
+     * gross profit, and net profit associated with the specified
+     * ticket number.
+     *
+     * @param ticketNumber Ticket number used to identify the sale.
+     *
+     * @return A SaleHistory object containing the ticket information.
+     *         Returns an empty SaleHistory object if the ticket does
+     *         not exist or if the database query fails.
+     */
+    SaleHistory getSaleDetails(int ticketNumber);
 };
 
 #endif // SALE_DATABASE_H
