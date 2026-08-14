@@ -620,17 +620,7 @@
     </item>
     <item>
      <property name="text">
-      <string>Fecha</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>Rango de fechas</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Todos</string>
      </property>
     </item>
    </widget>
