@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(Smart_Point_Of_Sale LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Sql)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Sql Charts)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -37,6 +37,9 @@ qt_add_executable(Smart_Point_Of_Sale
     src/dialog/dialog_ticket.h
     src/dialog/dialog_ticket.cpp
     src/dialog/dialog_ticket.ui
+    src/dialog/dialog_salechart.h
+    src/dialog/dialog_salechart.cpp
+    src/dialog/dialog_salechart.ui
 
     src/models/Product.h
 
@@ -54,6 +57,9 @@ qt_add_executable(Smart_Point_Of_Sale
 
     src/sales_mgr/sales_mgr.h
     src/sales_mgr/sales_mgr.cpp
+
+    src/statistics/sales_statistics.h
+    src/statistics/sales_statistics.cpp
 )
 
 target_link_libraries(Smart_Point_Of_Sale
@@ -61,6 +67,7 @@ target_link_libraries(Smart_Point_Of_Sale
         Qt::Core
         Qt::Widgets
         Qt::Sql
+        Qt::Charts
 )
 
 install(TARGETS Smart_Point_Of_Sale
