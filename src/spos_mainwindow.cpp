@@ -6,13 +6,17 @@
 #include "../src/dialog/dialog_findproduct.h"
 #include "../src/dialog/dialog_payment.h"
 #include "../src/dialog/dialog_ticket.h"
+#include "../src/dialog/dialog_salechart.h"
 #include "../src/product_database/product_mgr.h"
 #include "../src/sale_database/sale_database.h"
+#include "../src/statistics/sales_statistics.h"
 #include <QMessageBox>
 
 #include <QDirIterator>
 #include <QDebug>
 #include <QIcon>
+#include <QShortcut>
+#include <QKeySequence>
 
 /**
  * @brief Constructor of the main application window.
@@ -112,6 +116,26 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
             this,
             &SPOS_MainWindow::onTicketDoubleClicked);
 
+
+    QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+G"), this);
+
+    connect(shortcut, &QShortcut::activated, this, [this]()
+    {
+        QDate startDate = ui->dateEdit_From->date();
+        QDate endDate = ui->dateEdit_To->date();
+
+        QList<DailySales> data =
+        SalesStatistics::instance().getDailySales(
+                startDate,
+                endDate);
+
+        Dialog_SaleChart *chart =
+            new Dialog_SaleChart(data, this);
+
+        chart->setAttribute(Qt::WA_DeleteOnClose);
+        chart->show();
+    });
+
     ui->lineEdit_Barcode->setFocus();
 }
 
@@ -126,8 +150,13 @@ void SPOS_MainWindow::updateDateEditState()
     const QString filter =
         ui->comboBox_HistoryFilter->currentText();
 
+    if(filter == "Hoy")
+    {
+        ui->dateEdit_From->setDate(QDate::currentDate());
+        ui->dateEdit_To->setDate(QDate::currentDate());
+    }
+
     ui->dateEdit_From->setEnabled(
-        filter == "Fecha" ||
         filter == "Rango de fechas");
 
     ui->dateEdit_To->setEnabled(
