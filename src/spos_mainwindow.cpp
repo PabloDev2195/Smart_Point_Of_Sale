@@ -129,8 +129,16 @@ SPOS_MainWindow::SPOS_MainWindow(QWidget *parent)
                 startDate,
                 endDate);
 
+        QList<ProductSales> productSales =
+            SalesStatistics::instance().getProductSales(
+                startDate,
+                endDate);
+
         Dialog_SaleChart *chart =
-            new Dialog_SaleChart(data, this);
+            new Dialog_SaleChart(
+                data,
+                productSales,
+                this);
 
         chart->setAttribute(Qt::WA_DeleteOnClose);
         chart->show();

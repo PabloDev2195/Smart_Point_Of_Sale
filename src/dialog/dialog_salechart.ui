@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
-    <height>584</height>
+    <width>1080</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,17 +17,17 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>110</y>
-     <width>831</width>
-     <height>441</height>
+     <y>70</y>
+     <width>1011</width>
+     <height>341</height>
     </rect>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>10</y>
+     <x>480</x>
+     <y>0</y>
      <width>201</width>
      <height>31</height>
     </rect>
@@ -44,8 +44,8 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>50</y>
+     <x>300</x>
+     <y>40</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -57,8 +57,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>80</y>
+     <x>570</x>
+     <y>40</y>
      <width>81</width>
      <height>20</height>
     </rect>
@@ -70,8 +70,8 @@
   <widget class="QLabel" name="label_DateInit">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>50</y>
+     <x>400</x>
+     <y>40</y>
      <width>171</width>
      <height>20</height>
     </rect>
@@ -83,14 +83,24 @@
   <widget class="QLabel" name="label_DateFinal">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>80</y>
+     <x>670</x>
+     <y>40</y>
      <width>171</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QChartView" name="graphicsView_Products">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>420</y>
+     <width>1011</width>
+     <height>371</height>
+    </rect>
    </property>
   </widget>
  </widget>

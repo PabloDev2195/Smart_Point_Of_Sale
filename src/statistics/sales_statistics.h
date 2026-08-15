@@ -34,6 +34,25 @@ struct DailySales
 };
 
 /**
+ * @brief Stores aggregated sales information for a product.
+ *
+ * Contains the product name and the total quantity sold
+ * within a specified date range.
+ */
+struct ProductSales
+{
+    /**
+     * @brief Name of the product.
+     */
+    QString productName;
+
+    /**
+     * @brief Total quantity sold.
+     */
+    double quantity;
+};
+
+/**
  * @brief Provides sales statistics and aggregation functions.
  *
  * SalesStatistics uses a singleton pattern to provide access to
@@ -62,6 +81,22 @@ public:
      * @return List of daily sales statistics.
      */
     QList<DailySales> getDailySales(
+        const QDate& startDate,
+        const QDate& endDate);
+
+    /**
+     * @brief Retrieves product sales statistics for a specified date range.
+     *
+     * Returns the total quantity sold for each product within the
+     * specified date range.
+     *
+     * @param startDate Start date of the requested range.
+     * @param endDate End date of the requested range.
+     *
+     * @return List of ProductSales containing the product name and
+     *         total quantity sold.
+     */
+    QList<ProductSales> getProductSales(
         const QDate& startDate,
         const QDate& endDate);
 

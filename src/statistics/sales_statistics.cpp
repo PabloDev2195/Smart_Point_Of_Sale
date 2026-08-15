@@ -127,3 +127,79 @@ QList<DailySales> SalesStatistics::getDailySales(
 
     return dailySales;
 }
+
+/**
+ * @brief Retrieves product sales statistics for a date range.
+ *
+ * Calculates the total quantity sold for each product within
+ * the specified date range.
+ *
+ * @param startDate Start date of the requested range.
+ * @param endDate End date of the requested range.
+ *
+ * @return List of product sales statistics containing the product
+ *         name and total quantity sold.
+ */
+QList<ProductSales> SalesStatistics::getProductSales(
+    const QDate& startDate,
+    const QDate& endDate)
+{
+    QList<ProductSales> productSales;
+
+    QSqlDatabase database =
+        DatabaseManager::instance().getDatabase();
+
+    if (!database.isOpen())
+    {
+        qDebug() << "Database is not open.";
+
+        return productSales;
+    }
+
+    QSqlQuery query(database);
+
+    query.prepare(
+        "SELECT "
+        "p.name AS product_name, "
+        "SUM(si.quantity) AS total_quantity "
+        "FROM sale_items si "
+        "INNER JOIN sales s "
+        "ON si.sale_id = s.id "
+        "INNER JOIN products p "
+        "ON si.product_id = p.id "
+        "WHERE DATE(s.sale_date) BETWEEN :startDate AND :endDate "
+        "GROUP BY si.product_id "
+        "ORDER BY total_quantity DESC"
+        );
+
+    query.bindValue(
+        ":startDate",
+        startDate.toString("yyyy-MM-dd"));
+
+    query.bindValue(
+        ":endDate",
+        endDate.toString("yyyy-MM-dd"));
+
+    if (!query.exec())
+    {
+        qDebug() << "Error getting product sales:"
+                 << query.lastError().text();
+
+        return productSales;
+    }
+
+    while (query.next())
+    {
+        ProductSales product;
+
+        product.productName =
+            query.value("product_name").toString();
+
+        product.quantity =
+            query.value("total_quantity").toDouble();
+
+        productSales.append(product);
+    }
+
+    return productSales;
+}
