@@ -26,6 +26,7 @@ public:
      */
     explicit Dialog_SaleChart(
         const QList<DailySales>& data,
+        const QList<ProductSales>& productSales,
         QWidget *parent = nullptr);
 
     /**
@@ -44,4 +45,9 @@ private:
      * @brief Daily sales statistics used to generate the chart.
      */
     QList<DailySales> m_data;
+
+    /**
+     * @brief Stores product sales statistics used to generate the product chart.
+     */
+    QList<ProductSales> m_productSales;
 };
